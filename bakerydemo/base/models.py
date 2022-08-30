@@ -1,16 +1,21 @@
 from __future__ import unicode_literals
 
+from django import forms
+from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.admin.panels import FieldPanel,FieldRowPanel,InlinePanel,MultiFieldPanel,FieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormSubmission, AbstractFormField, FORM_FIELD_CHOICES
+from wagtail.contrib.forms.forms import FormBuilder
+from wagtail.contrib.forms.views import SubmissionsListView
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Collection, Page
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
-from .blocks import BaseStreamBlock
+from bakerydemo.streams.blocks import AsideBaseStreamBlock, ColumnsBlock
 
 
 @register_snippet
@@ -19,7 +24,6 @@ class People(index.Indexed, ClusterableModel):
     A Django model to store People objects.
     It uses the `@register_snippet` decorator to allow it to be accessible
     via the Snippets UI (e.g. /admin/snippets/base/people/)
-
     `People` uses the `ClusterableModel`, which allows the relationship with
     another model to be stored locally to the 'parent' model (e.g. a PageModel)
     until the parent is explicitly saved. This allows the editor to use the
@@ -100,276 +104,228 @@ class FooterText(models.Model):
         verbose_name_plural = "Footer Text"
 
 
-class StandardPage(Page):
-    """
-    A generic content page. On this demo site we use it for an about page but
-    it could be used for any type of page content that only needs a title,
-    image, introduction and body field
-    """
 
-    introduction = models.TextField(help_text="Text to describe the page", blank=True)
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Landscape mode only; horizontal width between 1000px and 3000px.",
-    )
-    body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
-    )
-    content_panels = Page.content_panels + [
-        FieldPanel("introduction", classname="full"),
-        FieldPanel("body"),
-        FieldPanel("image"),
+class RootPage(Page):
+    parent_page_types = ['wagtailcore.Page']
+    subpage_types  = ['base.HomePage']
+    is_creatable=True
+
+    @classmethod
+    def can_create_at(cls, parent): return super(RootPage, cls).can_create_at(parent)
+
+    class Meta:
+        verbose_name='Reseller Page'
+
+SE_INDEXING_CHOICES = ((True, "Don't Index"), (False, 'Index (Default)'))
+
+class HHPage(RootPage):
+    nav_title=models.CharField(max_length=45, verbose_name="Custom title for main nav-bar menu", null=True, blank=True, help_text="if not used, the page's title will be used in the nav-bar menu")
+    clickablity=models.BooleanField(default=True,verbose_name="Clickable/Visitable?", null=True, blank=True, help_text="If it is not checked, the page contents will NOT be shown to visitors and the menu title will NOT be clickable")
+    show_share_to=models.BooleanField(verbose_name="Show (Share to) button", null=True, blank=True, help_text="to Show the (share to) button on this page")
+    no_se_index=models.BooleanField(verbose_name="No SE Indexing (for this page)", null=True, blank=True, help_text="Use this to control on indexing this page or not (in search engines, like: bing, google or ... any other one)")
+    custom_metadata=models.TextField(blank=True, null=True, help_text="add as much elements as you need ")
+    maino=StreamField([("multi_columns_row", ColumnsBlock(required=False, blank=True, null=True)),], null=True, blank=True, verbose_name="Main section's Grid(Rows & Columns)")
+    aside=StreamField(AsideBaseStreamBlock(required=False, blank=True, null=True), verbose_name="", blank=True, null=True)
+
+    # show_in_menus = Page.show_in_menus.help_text=_("Whether a link to this page will appear in top navbar menu"))
+    content_panels=Page.content_panels + [
+        MultiFieldPanel([
+        FieldPanel('show_in_menus',classname="nav_menu_control col3"),
+        FieldPanel('clickablity',classname="nav_menu_link col3", widget=forms.CheckboxInput()),
+        FieldPanel('nav_title',classname="nav_menu_title col6"),
+        ],_('For main nav bar Menu '), classname="collapsible"),
+        StreamFieldPanel('maino',classname="main_section"),
+    ]
+    aside_panels = [StreamFieldPanel('aside',classname="aside_section"),]
+    
+    promote_panels = [
+        MultiFieldPanel([
+            FieldPanel('slug'),
+            FieldPanel('seo_title'),
+            FieldPanel('search_description'),
+            FieldPanel('no_se_index',classname="no_se_index", widget=forms.CheckboxInput()),
+            FieldPanel('custom_metadata'),
+            FieldPanel('show_share_to', widget=forms.CheckboxInput()),
+        ], _('For search engines and other METAs'), classname="collapsible"),
     ]
 
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading='Main Section'),
+            ObjectList(aside_panels, heading="Right Sidebar Section"),
+            ObjectList(promote_panels, heading='SEO'),
+            ObjectList(Page.settings_panels, heading='Other Settings'),
+        ]
+    )
+    is_creatable=False 
+ 
+    def get_admin_display_title(self): return f"{self.title} ({self.slug}) Page"
 
-class HomePage(Page):
-    """
-    The Home Page. This looks slightly more complicated than it is. You can
-    see if you visit your site and edit the homepage that it is split between
-    a:
-    - Hero area
-    - Body area
-    - A promotional area
-    - Moveable featured site sections
-    """
-
-    # Hero section of HomePage
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Homepage image",
-    )
-    hero_text = models.CharField(
-        max_length=255, help_text="Write an introduction for the bakery"
-    )
-    hero_cta = models.CharField(
-        verbose_name="Hero CTA",
-        max_length=255,
-        help_text="Text to display on Call to Action",
-    )
-    hero_cta_link = models.ForeignKey(
-        "wagtailcore.Page",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        verbose_name="Hero CTA link",
-        help_text="Choose a page to link to for the Call to Action",
-    )
-
-    # Body section of the HomePage
-    body = StreamField(
-        BaseStreamBlock(),
-        verbose_name="Home content block",
-        blank=True,
-        use_json_field=True,
-    )
-
-    # Promo section of the HomePage
-    promo_image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Promo image",
-    )
-    promo_title = models.CharField(
-        blank=True, max_length=255, help_text="Title to display above the promo copy"
-    )
-    promo_text = RichTextField(
-        null=True, blank=True, help_text="Write some promotional copy"
-    )
-
-    # Featured sections on the HomePage
-    # You will see on templates/base/home_page.html that these are treated
-    # in different ways, and displayed in different areas of the page.
-    # Each list their children items that we access via the children function
-    # that we define on the individual Page models e.g. BlogIndexPage
-    featured_section_1_title = models.CharField(
-        blank=True, max_length=255, help_text="Title to display above the promo copy"
-    )
-    featured_section_1 = models.ForeignKey(
-        "wagtailcore.Page",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="First featured section for the homepage. Will display up to "
-        "three child items.",
-        verbose_name="Featured section 1",
-    )
-
-    featured_section_2_title = models.CharField(
-        blank=True, max_length=255, help_text="Title to display above the promo copy"
-    )
-    featured_section_2 = models.ForeignKey(
-        "wagtailcore.Page",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Second featured section for the homepage. Will display up to "
-        "three child items.",
-        verbose_name="Featured section 2",
-    )
-
-    featured_section_3_title = models.CharField(
-        blank=True, max_length=255, help_text="Title to display above the promo copy"
-    )
-    featured_section_3 = models.ForeignKey(
-        "wagtailcore.Page",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Third featured section for the homepage. Will display up to "
-        "six child items.",
-        verbose_name="Featured section 3",
-    )
-
-    content_panels = Page.content_panels + [
-        MultiFieldPanel(
-            [
-                FieldPanel("image"),
-                FieldPanel("hero_text", classname="full"),
-                MultiFieldPanel(
-                    [
-                        FieldPanel("hero_cta"),
-                        FieldPanel("hero_cta_link"),
-                    ]
-                ),
-            ],
-            heading="Hero section",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel("promo_image"),
-                FieldPanel("promo_title"),
-                FieldPanel("promo_text"),
-            ],
-            heading="Promo section",
-        ),
-        FieldPanel("body"),
-        MultiFieldPanel(
-            [
-                MultiFieldPanel(
-                    [
-                        FieldPanel("featured_section_1_title"),
-                        FieldPanel("featured_section_1"),
-                    ]
-                ),
-                MultiFieldPanel(
-                    [
-                        FieldPanel("featured_section_2_title"),
-                        FieldPanel("featured_section_2"),
-                    ]
-                ),
-                MultiFieldPanel(
-                    [
-                        FieldPanel("featured_section_3_title"),
-                        FieldPanel("featured_section_3"),
-                    ]
-                ),
-            ],
-            heading="Featured homepage sections",
-            classname="collapsible",
-        ),
-    ]
-
-    def __str__(self):
-        return self.title
+    def __str__(self): 
+        if self.nav_title is None:
+            return f"{self.title} - {self.slug}"
+        return f"{self.nav_title} - {self.slug}"
 
 
-class GalleryPage(Page):
-    """
-    This is a page to list locations from the selected Collection. We use a Q
-    object to list any Collection created (/admin/collections/) even if they
-    contain no items. In this demo we use it for a GalleryPage,
-    and is intended to show the extensibility of this aspect of Wagtail
-    """
-
-    introduction = models.TextField(help_text="Text to describe the page", blank=True)
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        help_text="Landscape mode only; horizontal width between 1000px and " "3000px.",
-    )
-    body = StreamField(
-        BaseStreamBlock(), verbose_name="Page body", blank=True, use_json_field=True
-    )
-    collection = models.ForeignKey(
-        Collection,
-        limit_choices_to=~models.Q(name__in=["Root"]),
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        help_text="Select the image collection for this gallery.",
-    )
-
-    content_panels = Page.content_panels + [
-        FieldPanel("introduction", classname="full"),
-        FieldPanel("body"),
-        FieldPanel("image"),
-        FieldPanel("collection"),
-    ]
-
-    # Defining what content type can sit under the parent. Since it's a blank
-    # array no subpage can be added
-    subpage_types = []
+class HomePage(HHPage):
+  parent_page_types = ['RootPage']
+  subpage_types  = ['base.StandardPage','base.FormPage']
+  is_creatable=True
 
 
-class FormField(AbstractFormField):
-    """
-    Wagtailforms is a module to introduce simple forms on a Wagtail site. It
-    isn't intended as a replacement to Django's form support but as a quick way
-    to generate a general purpose data-collection form or contact form
-    without having to write code. We use it on the site for a contact form. You
-    can read more about Wagtail forms at:
-    https://docs.wagtail.org/en/stable/reference/contrib/forms/index.html
-    """
+class StandardPage(HHPage):
+  is_creatable=True
+  parent_page_types = ['HomePage', 'StandardPage']
+  subpage_types  = ['base.StandardPage','base.FormPage']
 
-    page = ParentalKey("FormPage", related_name="form_fields", on_delete=models.CASCADE)
+
+class SpecialPage(HHPage):
+  is_creatable=False # TODO: except the special users from this condition 
+  parent_page_types = ['HomePage']
+
+
+class HHFormBuilder(FormBuilder):
+    def create_image_field(self, field, options): return WagtailImageField(**options)
+
+
+class HHFormSubmission(AbstractFormSubmission):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    def get_data(self):
+        form_data=super().get_data()
+        form_data["submitted_by"] = self.user
+        # print(form_data)
+        # import json
+        # json_dict = json.loads(form_data)
+        return form_data
+
+    def __str__(self): return f'{self.form_data}'
+    # pass
+
+
+class HHSubmissionsListView(SubmissionsListView):
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        if not self.is_export:
+            # generate a list of field types, the first being the injected 'submission date'
+            field_types=['submission_date'] + ['user'] + [field.field_type for field in self.form_page.get_form_fields()]
+            data_rows=context['data_rows']
+            ImageModel=get_image_model()
+            for data_row in data_rows:
+                fields=data_row['fields']
+                for idx, (value, field_type) in enumerate(zip(fields, field_types)):
+                    if field_type == 'image' and value:
+                        image=ImageModel.objects.get(pk=value)
+                        rendition=image.get_rendition('fill-60x37|jpegquality-30')
+                        preview_url=rendition.url
+                        url=reverse('wagtailimages:edit', args=(image.id,))
+                        # build up a link to the image, using the image title & id
+                        fields[idx]=format_html(
+                            "<a href='{}'><img alt='Uploaded image - {}' src='{}' /><br>{}... ({})</a>",
+                            url,image.title,preview_url,image.title[:7],value
+                        )
+        return context
 
 
 class FormPage(AbstractEmailForm):
-    image = models.ForeignKey(
-        "wagtailimages.Image",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-    body = StreamField(BaseStreamBlock(), use_json_field=True)
-    thank_you_text = RichTextField(blank=True)
+    subpage_types=[]
+    parent_page_types = ['base.HomePage', 'StandardPage']
+    is_creatable=True
+    nav_title=models.CharField(max_length=45, verbose_name="Custom title for main nav-bar menu", null=True, blank=True, help_text="if not used, the page's title will be used in the nav-bar menu")
+    no_se_index=models.BooleanField(verbose_name="No SE Indexing", null=True, blank=True, help_text="Use this to control on indexing this page or not (in search engines, like: bing, google or ... any other one)")
+    custom_metadata=models.TextField(blank=True, null=True, help_text="add as much elements as you need ")
 
-    # Note how we include the FormField object via an InlinePanel using the
-    # related_name value
-    content_panels = AbstractEmailForm.content_panels + [
-        FieldPanel("image"),
-        FieldPanel("body"),
-        InlinePanel("form_fields", label="Form fields"),
-        FieldPanel("thank_you_text", classname="full"),
-        MultiFieldPanel(
-            [
-                FieldRowPanel(
-                    [
-                        FieldPanel("from_address", classname="col6"),
-                        FieldPanel("to_address", classname="col6"),
-                    ]
-                ),
-                FieldPanel("subject"),
-            ],
-            "Email",
-        ),
+    form_builder=HHFormBuilder
+    # submissions_list_view_class=HHSubmissionsListView
+    uploaded_image_collection=models.ForeignKey('wagtailcore.Collection',null=True,blank=True,on_delete=models.SET_NULL,help_text=_('collection for uploaded image (if that field had been used), Default: Root') ,)
+    thank_you_text=models.CharField(max_length=200, blank=True)
+    more_submissions=models.BooleanField(verbose_name="Can a User Submit more than Once?",default=True, null=True, blank=True, help_text="uncheck this if you want to prevent a user from submitting more than once (Users should be registered))")
+
+    content_panels=Page.content_panels + [
+        FieldPanel('more_submissions', classname="col4"),
+        FieldPanel('subject', classname="full"),
+        FieldRowPanel([FieldPanel('from_address', classname="col6"),FieldPanel('to_address', classname="col6"),]),
+        FieldPanel('thank_you_text', classname="full"),
     ]
+    form_fields_panels = [
+        MultiFieldPanel([InlinePanel('form_fields', label="Field", classname="collapsible" ),FieldPanel('uploaded_image_collection', classname="col6"),],heading="Fields", classname=""),
+    ]
+    
+    promote_panels = [
+        MultiFieldPanel([
+            FieldPanel('slug'),
+            FieldPanel('seo_title'),
+            FieldPanel('search_description'),
+            FieldPanel('custom_metadata')
+        ], _('For search engines and other METAs'), classname="collapsible"),
+    ]
+    
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading='Main Section'),
+            ObjectList(form_fields_panels, heading="Form Fields Section"),
+            ObjectList(promote_panels, heading='SEO'),
+            ObjectList(Page.settings_panels, heading='Other Settings'),
+        ]
+    )
+    
+    def get_admin_display_title(self): return f"{self.title} ({self.slug}) Form"
+
+    def get_uploaded_image_collection(self):
+        """ Returns a Wagtail Collection, using this form's saved value if present, otherwise returns the 'Root' Collection. """
+        collection=self.uploaded_image_collection
+        return collection or Collection.get_first_root_node()
+    
+    @staticmethod
+    def get_image_title(filename): return filename
+    def get_submission_class(self): return HHFormSubmission
+
+    def process_form_submission(self, form):
+        """ Processes the form submission, if an Image upload is found, pull out the files data, create an actual Wgtail Image and reference it in the stored form response. """
+        from django.contrib.auth import get_user_model
+        user = get_user_model()
+        cleaned_data=form.cleaned_data
+        for name, field in form.fields.items():
+            if isinstance(field, WagtailImageField):
+                image_file_data=cleaned_data[name]
+                if image_file_data:
+                    ImageModel=get_image_model()
+                    kwargs={'file': cleaned_data[name],
+                        'title': self.get_image_title(cleaned_data[name].name),
+                        'collection': self.get_uploaded_image_collection(),}
+                    if form.user and not form.user.is_anonymous: kwargs['uploaded_by_user']=form.user
+                    else: kwargs['uploaded_by_user']=user.objects.get(id=8)
+                    image=ImageModel(**kwargs)
+                    image.save()
+                    # saving the image id (alternatively we can store a path to the image via image.get_rendition)
+                    cleaned_data.update({name: image.pk})
+                else:
+                    # remove the value from the data
+                    del cleaned_data[name]
+        submission=self.get_submission_class().objects.create(form_data=cleaned_data,page=self, user=form.user)
+        # important: if extending AbstractEmailForm, email logic must be re-added here
+        if self.to_address: self.send_mail(form)
+        return submission
+
+    def get_form_fields(self):
+        fields = list(super().get_form_fields())
+        # append instances of FormField (not actually stored in the db)
+        # field_type can only be one of the following:
+        # 'singleline', 'multiline', 'email', 'number', 'url', 'checkbox', 'checkboxes', 'dropdown', 'multiselect', 'radio', 'date', 'datetime', 'hidden'
+        # Important: Label MUST be unique in each form
+        # `insert(0` will prepend these items, so here ID will be first
+
+        fields.insert(1000, FormField(
+            label='I am not a Human',
+            field_type='singleline',
+            required=False,
+            help_text="Only fill this field if you are not a human"))
+        return fields
+
+    class Meta:
+        verbose_name="Form"
+        # verbose_name_plurer="Forms"
+    
+
+class FormField(AbstractFormField):
+    field_type=models.CharField(verbose_name='field type',max_length=16,choices=list(FORM_FIELD_CHOICES) + [('image', 'Upload Image'), ] ) # todo  ('user', 'submited by'), 
+    page=ParentalKey('base.FormPage', related_name='form_fields', on_delete=models.CASCADE)

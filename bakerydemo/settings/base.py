@@ -35,11 +35,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "bakerydemo.streams",
     "bakerydemo.base",
-    "bakerydemo.blog",
-    "bakerydemo.breads",
-    "bakerydemo.locations",
-    "bakerydemo.search",
     "wagtail.contrib.search_promotions",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",

@@ -5,18 +5,14 @@ from wagtail.embeds.blocks import EmbedBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
 from wagtail.blocks import BooleanBlock, CharBlock, ChoiceBlock, RichTextBlock, StreamBlock, StructBlock, TextBlock, RawHTMLBlock, ListBlock, PageChooserBlock, IntegerBlock, DateTimeBlock
-from wmodelchooser.blocks import ModelChooserBlock
 from .style_blocks import ElementStyleBlock, ElementStyleNoHoverBlock, MarqueeSettings
-# from .privacy import PrivacyBlock
-from .charts import ChartsStructBlock 
 from .cards import ImageBlock, FixedImageCard, CircleImageCardBlock, HoverCTACard, IconTitleDesc
 from .texts import SingleLineTextElement, MultiLineTextElement, HHCharBlock, HHRichTextBlock, MarqueeRichTextBlock
 from .svg import MapBlock  
 from .tables import HHTableBlock, HTableBlock
 from .typing_effects import TypeWriterText, SwapWordTypeWriting
 from .forms import EmbedFormPage, EmbedFormPageModal
-from .sliders_banners import BannerBlock, sliderBlock
-
+from .sliders_banners import * # noqa
 
 class HHEmbedBlock(StructBlock):
     embeds = ListBlock( StructBlock( [("height", CharBlock(blank=True, null=True, required=False, label = "object height", help = "height for this video embed object")),
@@ -79,7 +75,6 @@ class TabBodyStreamBlock(StreamBlock):
     paragraph = HHRichTextBlock(blank=True, null=True, required=False,help_text="you can use the mark-down code for font sizes, ex: [s1]=1rem [s2]=1.5rem [nl]=new_empty_line ")
     hr = HrElement(blank=True, null=True, required=False)
     marquee = MarqueeRichTextBlock(blank=True, null=True, required=False,icon="",help_text="same as RichText Paragraph but with moving behaviours")
-    carousel = sliderBlock(blank=True, null=True, required=False,)
     image = ImageBlock(blank=True, null=True, required=False,)
     embed = HHEmbedBlock(blank=True, null=True, required=False, help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks',template="blocks/hh_embed_block")
     embed_form = EmbedFormPage(blank=True, null=True, required=False,)
@@ -139,7 +134,6 @@ class InnerStreamBlock(StreamBlock):
     # rtl_paragraph = HHRichTextBlock(icon="",template="blocks/paragraph_bidi_block_styled.html",blank=True, null=True, required=False, label=' Paragraph for bidi languages ',help_text="you can use the mark-down code for font sizes, ex: [s1]=1rem [s2]=1.5rem [nl]=new_empty_line ")
     hr = HrElement(blank=True, null=True, required=False)
     marquee = MarqueeRichTextBlock(icon="",blank=True, null=True, required=False,help_text="same as RichText Paragraph but with moving behaviours")
-    carousel = sliderBlock(blank=True, null=True, required=False)
     image = ImageBlock(blank=True, null=True, required=False)
     banner = BannerBlock(blank=True, null=True, required=False, help_text="Only Saved inside this Page (can't be accessed or reused in other pages)..! ")
     local_tabs = TabsBlock(blank=True, null=True, required=False)
@@ -212,7 +206,6 @@ class GalleryStreamBlock(StreamBlock):
     heading = SingleLineTextElement(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False)
     paragraph = HHRichTextBlock(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False,help_text="you can use the mark-down code for font sizes, ex: [s1]=1rem [s2]=1.5rem..etc")
     marquee = MarqueeRichTextBlock(group="      SimpleText & RichText Blocks",icon="",blank=True, null=True, required=False,help_text="same as RichText Paragraph but with moving behaviours")
-    carousel = sliderBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False)
     banner = BannerBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False, help_text="Only Saved inside this Page (can't be accessed or reused in other pages)..! ")
     image = ImageBlock(group="    Image & Card Blocks",blank=True, null=True, required=False)
     figure_image = FixedImageCard(group="    Image & Card Blocks",blank=True, null=True, required=False)
@@ -221,7 +214,6 @@ class GalleryStreamBlock(StreamBlock):
     modal = InnerColumnsBlock(group="Complicated Blocks",blank=True, null=True, required=False, help_text="Only One modal block is applicable per page..! ")
     embed_form = EmbedFormPage(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
     embed_form_modal = EmbedFormPageModal(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
-    charts = ChartsStructBlock(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False, help_text="Some Chart and Plot Blocks", label="Charts/Plots Blocks 📊📈")
     sections = SectionsStructBlock(group="Complicated Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False, help_text="Some Chart and Plot Blocks", label="Sections of Summary-Details Blocks ")
     table = HTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Table Block", label="Table Block ")
     tablea = HHTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Enhanced Table Block", label="Enhanced Table Block ")
@@ -256,7 +248,7 @@ class AsideBaseStreamBlock(StreamBlock):
     heading = SingleLineTextElement(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False)
     paragraph = HHRichTextBlock(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False,help_text="you can use the mark-down code for font sizes, ex: [s1]=1rem [s2]=1.5rem..etc")
     marquee = MarqueeRichTextBlock(group="      SimpleText & RichText Blocks",icon="",blank=True, null=True, required=False,help_text="same as RichText Paragraph but with moving behaviours")
-    carousel = sliderBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False)
+    
     banner = BannerBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False, help_text="Only Saved inside this Page (can't be accessed or reused in other pages)..! ")
     image = ImageBlock(group="    Image & Card Blocks",blank=True, null=True, required=False)
     figure_image = FixedImageCard(group="    Image & Card Blocks",blank=True, null=True, required=False)
@@ -268,7 +260,6 @@ class AsideBaseStreamBlock(StreamBlock):
     embed = HHEmbedBlock(group="Whatever Else",blank=True, help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks',null=True)
     embed_form = EmbedFormPage(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
     embed_form_modal = EmbedFormPageModal(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
-    charts = ChartsStructBlock(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False, help_text="Some Chart and Plot Blocks", label="Charts/Plots Blocks 📊📈")
     table = HTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Table Block", label="Table Block ")
     tablea = HHTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Enhanced Table Block", label="Enhanced Table Block ")
     raw_code = RawHTMLBlock(group="Custom Local Code-Blocks", icon="",template="blocks/html_raw_block.html",blank=True, null=True, required=False, help_text="for this page only", label="Custom (local) HTML 📜")
@@ -285,7 +276,7 @@ class BlogStreamBlock(StreamBlock):
     heading = SingleLineTextElement(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False)
     paragraph = HHRichTextBlock(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False,help_text="you can use the mark-down code for font sizes, ex: [s1]=1rem [s2]=1.5rem..etc")
     marquee = MarqueeRichTextBlock(group="      SimpleText & RichText Blocks",icon="",blank=True, null=True, required=False,help_text="same as RichText Paragraph but with moving behaviours")
-    carousel = sliderBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False)
+    
     banner = BannerBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False, help_text="Only Saved inside this Page (can't be accessed or reused in other pages)..! ")
     image = ImageBlock(group="    Image & Card Blocks",blank=True, null=True, required=False)
     figure_image = FixedImageCard(group="    Image & Card Blocks",blank=True, null=True, required=False)
@@ -294,7 +285,6 @@ class BlogStreamBlock(StreamBlock):
     modal = InnerColumnsBlock(group="Complicated Blocks",blank=True, null=True, required=False, help_text="Only One modal block is applicable per page..! ")
     embed_form = EmbedFormPage(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
     embed_form_modal = EmbedFormPageModal(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
-    charts = ChartsStructBlock(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False, help_text="Some Chart and Plot Blocks", label="Charts/Plots Blocks 📊📈")
     sections = SectionsStructBlock(group="Complicated Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False, help_text="Some Chart and Plot Blocks", label="Sections of Summary-Details Blocks ")
     table = HTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Table Block", label="Table Block ")
     tablea = HHTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Enhanced Table Block", label="Enhanced Table Block ")
@@ -309,7 +299,7 @@ class BlogsAsideStreamBlock(StreamBlock):
     heading = SingleLineTextElement(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False)
     paragraph = HHRichTextBlock(group="      SimpleText & RichText Blocks",blank=True, null=True, required=False,help_text="you can use the mark-down code for font sizes, ex: [s1]=1rem [s2]=1.5rem..etc")
     marquee = MarqueeRichTextBlock(group="      SimpleText & RichText Blocks",icon="",blank=True, null=True, required=False,help_text="same as RichText Paragraph but with moving behaviours")
-    carousel = sliderBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False)
+    
     banner = BannerBlock(group="     Banner & Slider Blocks",blank=True, null=True, required=False, help_text="Only Saved inside this Page (can't be accessed or reused in other pages)..! ")
     image = ImageBlock(group="    Image & Card Blocks",blank=True, null=True, required=False)
     figure_image = FixedImageCard(group="    Image & Card Blocks",blank=True, null=True, required=False)
@@ -321,7 +311,6 @@ class BlogsAsideStreamBlock(StreamBlock):
     embed = HHEmbedBlock(group="Whatever Else",blank=True, help_text='Insert an embed URL e.g https://www.youtube.com/embed/SGJFWirQ3ks',null=True)
     embed_form = EmbedFormPage(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
     embed_form_modal = EmbedFormPageModal(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False)
-    charts = ChartsStructBlock(group="    Data Collecting Form Blocks & Data Presentation Chart blocks",blank=True, null=True, required=False, help_text="Some Chart and Plot Blocks", label="Charts/Plots Blocks 📊📈")
     table = HTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Table Block", label="Table Block ")
     tablea = HHTableBlock(group="  Data Tables blocks",blank=True, null=True, required=False, help_text="Enhanced Table Block", label="Enhanced Table Block ")
     raw_code = RawHTMLBlock(group="Custom Local Code-Blocks", icon="",template="blocks/html_raw_block.html",blank=True, null=True, required=False, help_text="for this page only", label="Custom (local) HTML 📜")

@@ -116,9 +116,9 @@ def register_defaults(features):
     return features.default_features
 
 
-from .views import SlideChooserViewSet
+# from .views import SlideChooserViewSet
 
 
-@hooks.register('register_admin_viewset')
-def register_slide_chooser_viewset():
-    return SlideChooserViewSet('slide_chooser', url_prefix='slide-chooser')
+# @hooks.register('register_admin_viewset')
+# def register_slide_chooser_viewset():
+#     return SlideChooserViewSet('slide_chooser', url_prefix='slide-chooser')

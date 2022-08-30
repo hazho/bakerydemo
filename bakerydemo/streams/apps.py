@@ -2,6 +2,6 @@ from django.apps import AppConfig
 
 
 class StreamsConfig(AppConfig):
-    name = 'streams'
+    name = 'bakerydemo.streams'
     label = 'streams'
     verbose_name = "streams"
