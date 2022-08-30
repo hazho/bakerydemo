@@ -1,0 +1,9 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<style>
+    {{ self.row_style}}
+</style>
+{% for col in self.cols %}
+    <div class="col" style="float: left; width: {{col.col_style.width}}">
+        {{ row.col.col_items}}
+    </div>
+{% endfor %}

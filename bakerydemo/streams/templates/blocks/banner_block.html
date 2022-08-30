@@ -1,0 +1,123 @@
+{% load wagtailimages_tags wagtailcore_tags cache %}
+
+{% now 'YmdH' as n %} 
+{% if not self.banner.el_style.live.s_at or self.banner.el_style.live.s_at|date:"YmdH" < n and not self.banner.el_style.live.e_at or self.banner.el_style.live.e_at and self.banner.el_style.live.e_at|date:"YmdH" > n %}
+
+{% cache 500 banner_style %}
+    <style>
+        .button.banner_cta_link {background: var(--main_bg_color ,#fff);opacity: .8;margin: 1rem;padding: 1rem;color: var(--main_color);
+            border-radius: 1rem;box-shadow: inset 0 0 5px 2px black;font-size: 2.5rem;}
+        .banner_block_paralax { min-height: 300;height: 400;box-shadow: inset 0 0 15px -1px;background-attachment: fixed;background-position: center;
+        background-repeat: no-repeat;background-size: cover;box-shadow: inset 0 0 15px -1px;}
+        .banner_text_container {height: max-content;position: relative;top: 4rem;padding: 2rem;border-radius: 2rem;margin: 0 4rem;}
+        .banner_title {background: none;font-size: 2.5rem;}
+        .banner_description {background: none;margin: 1rem;padding: 1rem;color: var(--main_color);font-size: 1.5rem;}
+        @media only screen and (max-width: 775px){
+            .banner_text_container {padding: 2rem 1rem;margin: 0 ;}
+            .banner_title {font-size: 1.8rem;margin: 0;}
+            .banner_description {margin: .5rem;padding: .5rem;font-size: 1.1rem;}
+            .button.banner_cta_link {font-size: 1.2rem;}
+        }
+
+
+        #{{ self.banner.el_style.el_id }}:hover {
+            {% if self.banner.el_style.hover_styling.h_text_align %} text-align:{{self.banner.el_style.hover_styling.h_text_align}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_padding %} padding:{{self.banner.el_style.hover_styling.h_padding}} !important; {% endif %}
+            {% if self.banner.el_style.hover_styling.h_margin %} margin:{{self.banner.el_style.hover_styling.h_margin}} !important; {% endif %}
+            {% if self.banner.el_style.hover_styling.h_font_size %} font-size:{{self.banner.el_style.hover_styling.h_font_size}} !important; {% endif %}
+            {% if self.banner.el_style.hover_styling.h_width %} width:{{self.banner.el_style.hover_styling.h_width}} !important; {% endif %}
+            {% if self.banner.el_style.hover_styling.h_height %} height:{{self.banner.el_style.hover_styling.h_height}} !important; {% endif %}
+            {% if self.banner.el_style.hover_styling.h_b_radius %} border-radius:{{self.banner.el_style.hover_styling.h_b_radius}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_b_top %} border-top:{{self.banner.el_style.hover_styling.h_b_top}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_b_right %} border-right:{{self.banner.el_style.hover_styling.h_b_right}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_b_bottom %} border-bottom:{{self.banner.el_style.hover_styling.h_b_bottom}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_b_left %} border-left:{{self.banner.el_style.hover_styling.h_b_left}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_box_shadow %} box-shadow: {{self.banner.el_style.hover_styling.h_box_shadow}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_color %} color: {{self.banner.el_style.hover_styling.h_color}}{{self.banner.el_style.hover_styling.h_color_opacity}} !important;{% endif %}
+            {% if self.banner.el_style.hover_styling.h_use_bg_color %} background-color:{{self.banner.el_style.hover_styling.h_bg_c}}{{self.banner.el_style.hover_styling.h_bg_color_opacity}} !important;{% endif %}
+        }
+    </style>
+{% endcache %}
+<div id="{{ self.banner.el_style.el_id }}" class="banner_block_paralax center "
+            style="
+                {% if self.banner.el_style.position %} position:{{self.banner.el_style.position}}; {% endif %}
+                {% if self.banner.el_style.left %} left:{{self.banner.el_style.left}}; {% endif %}
+                {% if self.banner.el_style.top %} top:{{self.banner.el_style.top}}; {% endif %}
+                {% if self.banner.el_style.font_size %}font-size:{{ self.banner.el_style.font_size }};{% endif %}
+                {% if self.banner.el_style.padding %}padding:{{ self.banner.el_style.padding }};{% endif %}
+                {% if self.banner.el_style.margin %}margin:{{ self.banner.el_style.margin }};{% endif %}
+                {% if self.banner.el_style.width %}width:{{ self.banner.el_style.width }};{% endif %}
+                {% if self.banner.el_style.height %}height:{{ self.banner.el_style.height }};{% endif %}
+                {% if self.banner.el_style.box_shadow %}box_shadow:{{ self.banner.el_style.box_shadow }};{% endif %}
+                {% if self.banner.el_style.overflow %}overflow:{{ self.banner.el_style.overflow }};{% endif %}
+                {% if self.banner.el_style.b_radius %}border-radius:{{ self.banner.el_style.b_radius }};{% endif %}
+                {% if self.banner.el_style.b_top %}border-top:{{ self.banner.el_style.b_top }};{% endif %}
+                {% if self.banner.el_style.b_right %}border-right:{{ self.banner.el_style.b_right }};{% endif %}
+                {% if self.banner.el_style.b_bottom %}border-bottom:{{ self.banner.el_style.b_bottom }};{% endif %}
+                {% if self.banner.el_style.b_left %}border-left:{{ self.banner.el_style.b_left }};{% endif %}
+                {% if self.banner.el_style.text_align %}text-align:{{ self.banner.el_style.text_align }};{% endif %}
+                {% if self.banner.el_style.direction %}direction:{{ self.banner.el_style.direction }};{% endif %}
+                {% if self.banner.el_style.use_bg_color %} background-color:{{ self.banner.el_style.bg_c }}{{ self.banner.title.el_style.bg_color_opacity }};{% endif %}
+                {% if self.banner.el_style.blur %}backdrop-filter: blur({{ self.banner.el_style.blur }}px);{% endif %}
+                {% if self.banner.el_style.image %}{% image self.banner.el_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.banner.el_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+            ">
+    <div class="banner-gradient-mask"></div>
+    <div class="banner_text_container" style="{% if self.banner.title.heading_text or self.banner.description.text %} background: #f7f7f7cc; {% if self.banner.el_style.use_bg_color %} background-color:{{ self.banner.el_style.bg_c }}{{ self.banner.el_style.bg_color_opacity }};{% endif %} {% else %} display: none; {% endif %}">
+                
+        {% if self.banner.title.el_style.el_pg_link %} <a href="{{self.banner.title.el_style.el_pg_link.url}}" class="link" {% if self.banner.title.el_style.new_tab %} target="_blank" {% endif %} >
+        {% elif self.banner.title.el_style.el_url_link %} <a href="{{self.banner.title.el_style.el_url_link}}" class="link" {% if self.banner.title.el_style.new_tab %} target="_blank" {% endif %} >
+        {% endif %} 
+        <h2 class="banner_title"
+            style="
+                {% if self.banner.title.el_style.font_size %}font-size:{{ self.banner.title.el_style.font_size }};{% endif %}
+                {% if self.banner.title.el_style.padding %}padding:{{ self.banner.title.el_style.padding }};{% endif %}
+                {% if self.banner.title.el_style.margin %}margin:{{ self.banner.title.el_style.margin }};{% endif %}
+                {% if self.banner.title.el_style.width %}width:{{ self.banner.title.el_style.width }};{% endif %}
+                {% if self.banner.title.el_style.height %}height:{{ self.banner.title.el_style.height }};{% endif %}
+                {% if self.banner.title.el_style.box_shadow %}box_shadow:{{ self.banner.title.el_style.box_shadow }};{% endif %}
+                {% if self.banner.title.el_style.overflow %}overflow:{{ self.banner.title.el_style.overflow }};{% endif %}
+                {% if self.banner.title.el_style.b_radius %}border-radius:{{ self.banner.title.el_style.b_radius }};{% endif %}
+                {% if self.banner.title.el_style.b_top %}border-top:{{ self.banner.title.el_style.b_top }};{% endif %}
+                {% if self.banner.title.el_style.b_right %}border-right:{{ self.banner.title.el_style.b_right }};{% endif %}
+                {% if self.banner.title.el_style.b_bottom %}border-bottom:{{ self.banner.title.el_style.b_bottom }};{% endif %}
+                {% if self.banner.title.el_style.b_left %}border-left:{{ self.banner.title.el_style.b_left }};{% endif %}
+                {% if self.banner.title.el_style.text_align %}text-align:{{ self.banner.title.el_style.text_align }};{% endif %}
+                {% if self.banner.title.el_style.direction %}direction:{{ self.banner.title.el_style.direction }};{% endif %}
+                {% if self.banner.title.el_style.use_bg_color %} background-color:{{ self.banner.title.el_style.bg_c }}{{ self.banner.title.el_style.bg_color_opacity }};{% endif %}
+                {% if self.banner.title.el_style.color %} color:{{ self.banner.title.el_style.color }}{{ self.banner.title.el_style.color_opacity }};{% endif %}
+                {% if self.banner.title.el_style.blur %}backdrop-filter: blur({{ self.banner.title.el_style.blur }}px);{% endif %}
+                {% if self.banner.title.el_style.image %}{% image self.banner.title.el_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.banner.description.el_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+            ">{{ self.banner.title.heading_text }}</h2> 
+            </a>
+        {% if self.banner.description.text %} 
+                    
+            {% if self.banner.description.el_style.el_pg_link %} <a href="{{self.banner.description.el_style.el_pg_link.url}}" class="link" {% if self.banner.description.el_style.new_tab %} target="_blank" {% endif %} >
+            {% elif self.banner.description.el_style.el_url_link %} <a href="{{self.banner.description.el_style.el_url_link}}" class="link" {% if self.banner.description.el_style.new_tab %} target="_blank" {% endif %} >
+            {% endif %} 
+            <p class="{% if self.banner.description.el_style.no_mobile %} no_mobile{% elif self.banner.description.el_style.no_desktop %} no_desktop{% endif %}" 
+            style="
+                {% if self.banner.description.el_style.font_size %}font-size:{{ self.banner.description.el_style.font_size }};{% endif %}
+                {% if self.banner.description.el_style.padding %}padding:{{ self.banner.description.el_style.padding }};{% endif %}
+                {% if self.banner.description.el_style.margin %}margin:{{ self.banner.description.el_style.margin }};{% endif %}
+                {% if self.banner.description.el_style.width %}width:{{ self.banner.description.el_style.width }};{% endif %}
+                {% if self.banner.description.el_style.height %}height:{{ self.banner.description.el_style.height }};{% endif %}
+                {% if self.banner.description.el_style.box_shadow %}box_shadow:{{ self.banner.description.el_style.box_shadow }};{% endif %}
+                {% if self.banner.description.el_style.overflow %}overflow:{{ self.banner.description.el_style.overflow }};{% endif %}
+                {% if self.banner.description.el_style.b_radius %}border-radius:{{ self.banner.description.el_style.b_radius }};{% endif %}
+                {% if self.banner.description.el_style.b_top %}border-top:{{ self.banner.description.el_style.b_top }};{% endif %}
+                {% if self.banner.description.el_style.b_right %}border-right:{{ self.banner.description.el_style.b_right }};{% endif %}
+                {% if self.banner.description.el_style.b_bottom %}border-bottom:{{ self.banner.description.el_style.b_bottom }};{% endif %}
+                {% if self.banner.description.el_style.b_left %}border-left:{{ self.banner.description.el_style.b_left }};{% endif %}
+                {% if self.banner.description.el_style.text_align %}text-align:{{ self.banner.description.el_style.text_align }};{% endif %}
+                {% if self.banner.description.el_style.direction %}direction:{{ self.banner.description.el_style.direction }};{% endif %}
+                {% if self.banner.description.el_style.use_bg_color %} background-color:{{ self.banner.description.el_style.bg_c }}{{ self.banner.description.el_style.bg_color_opacity }};{% endif %}
+                {% if self.banner.description.el_style.color %} color:{{ self.banner.description.el_style.color }}{{ self.banner.description.el_style.color_opacity }};{% endif %}
+                {% if self.banner.description.el_style.blur %}backdrop-filter: blur({{ self.banner.description.el_style.blur }}px);{% endif %}
+                {% if self.banner.description.el_style.image %}{% image self.banner.description.el_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.banner.description.el_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+            ">{{ self.banner.description.text }}</p>
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}

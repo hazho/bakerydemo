@@ -1,0 +1,39 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+    <div id="mw_{{ self.col_style.el_id }}" class="modal_window" style="display: block;z-index: 1010;padding-top: 2.6%;position: fixed;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgba(0,0,0,0.4);">
+        <div onclick="document.getElementById('mw_{{ self.col_style.el_id }}').style.display='none'" class="modal_close" style="cursor: pointer;position: relative;top: -1.2rem;background: var(--main_bg_color);border-radius: 50%;padding: .5rem .8rem;font-weight: 900;text-shadow: 0 0 3px black;width: fit-content;">×</div>
+        <div id="{{ self.col_style.el_id }}" class="row_section {{ self.col_style.el_class }} {% if self.col_style.no_desktop and self.col_style.no_mobile %}no_desktop no_mobile{% elif self.col_style.no_desktop %}no_desktop{% elif self.col_style.no_mobile %}no_mobile{% endif %}"
+            style="
+                {% if self.col_style.z_index %} z-index:{{self.col_style.z_index}};{% endif %}
+                {% if self.col_style.text_align %} text-align:{{self.col_style.text_align}};{% endif %}
+                {% if self.col_style.direction == rtl %} direction:{{self.col_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+                {% if self.col_style.position %} position:{{self.col_style.position}}; {% endif %}
+                {% if self.col_style.left %} left:{{self.col_style.left}}; {% endif %}
+                {% if self.col_style.top %} top:{{self.col_style.top}}; {% endif %}
+                {% if self.col_style.padding %} padding:{{self.col_style.padding}}; {% endif %}
+                {% if self.col_style.margin %} margin:{{self.col_style.margin}}; {% endif %}
+                {% if self.col_style.font_size %} font-size:{{self.col_style.font_size}}; {% endif %}
+                {% if self.col_style.width %} width:{{self.col_style.width}};{% endif %} 
+                {% if self.col_style.floating %} float:{{self.col_style.floating}};{% endif %} 
+                {% if self.col_style.height %} height:{{self.col_style.height}};{% endif %}
+                {% if self.col_style.b_radius %} border-radius:{{self.col_style.b_radius}};{% endif %}
+                {% if self.col_style.b_top %} border-top:{{self.col_style.b_top}};{% endif %}
+                {% if self.col_style.b_right %} border-right:{{self.col_style.b_right}};{% endif %}
+                {% if self.col_style.b_bottom %} border-bottom:{{self.col_style.b_bottom}};{% endif %}
+                {% if self.col_style.b_left %} border-left:{{self.col_style.b_left}};{% endif %}
+                {% if self.col_style.box_shadow %} box-shadow: {{self.col_style.box_shadow}} ;{% endif %}
+                {% if self.col_style.overflow %} overflow: {{self.col_style.overflow}} ;{% endif %}
+                {% if self.col_style.color %} color: {{self.col_style.color}} ;{% endif %}
+                {% if self.col_style.use_bg_color %} background-color:{{self.col_style.bg_c}};{% endif %}
+                {% if self.col_style.image %}{% image self.col_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.col_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+            " >
+              {{ self.col_row }}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            document.getElementById('mw_{{ self.col_style.el_id }}').style.display='none';
+        }
+        })
+    </script>

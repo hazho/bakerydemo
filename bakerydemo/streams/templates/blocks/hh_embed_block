@@ -1,0 +1,13 @@
+
+    <style>
+        div.iframe > div{padding: 0 0 0 0 !important;}
+    </style>
+    {% for video in self.embeds %}
+        <style>
+            div#{{ video.id }} iframe {height:{{video.height}} !important; width: calc({{video.height}}*1.777);}
+            div#{{ video.id }} {height:{{video.height}} !important; width: fit-content; text-align: center; float: left;}
+        </style>
+        <div class="iframe" id="{{ video.id }}">
+            {{video.embed_link_url}}
+        </div>
+    {% endfor %}

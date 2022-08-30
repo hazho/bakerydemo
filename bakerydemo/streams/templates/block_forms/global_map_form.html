@@ -1,0 +1,27 @@
+{% load wagtailadmin_tags %}
+
+<div class="{{ classname }}">
+    {% if help_text %}
+        <span> <div class="help">{{ help_text }}</div> </span>
+    {% endif %}
+
+    {% for child in children.values %}
+        <div class="field {% if child.block.required %}required{% endif %}" d_cp="{{ child.block.name }}">
+            {% if child.block.label %}
+                <label class="field__label {{ child.id_for_label }}" {% if child.id_for_label %}for="{{ child.id_for_label }}"{% endif %}>{{ child.block.label }}</label>
+            {% endif %}
+            {% if child.block.name == "featured" %}
+              {{ child.render_form }}
+              {% include 'block_forms/includes/multi_check_select_element.html' %}
+            {% else %}
+              {{ child.render_form }}
+            {% endif %}
+        </div>
+
+    {% endfor %}
+        <script>
+            $(document).ready(function(){
+            });
+        </script>
+    
+</div>

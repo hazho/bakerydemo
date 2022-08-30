@@ -1,0 +1,31 @@
+
+{% load  wagtailimages_tags %}
+
+{% comment %} filter: drop-shadow(.025em .025em); {% endcomment %}
+{% comment %} mix-blend-mode: difference; {% endcomment %}
+text-shadow:{{self.el_style.text_shadow}};
+{% if self.el_style.text_align %} text-align:{{self.el_style.text_align}};{% endif %}
+{% if self.el_style.z_index %} z-index:{{self.el_style.z_index}};{% endif %}
+{% if self.el_style.transform %} transform:{{self.el_style.transform}};{% endif %}
+{% if self.el_style.floating %} float:{{self.el_style.floating}}; {% endif %}
+{% if self.el_style.padding %} padding:{{self.el_style.padding}}; {% endif %}
+{% if self.el_style.margin %} margin:{{self.el_style.margin}}; {% endif %}
+{% if self.el_style.position %} position:{{self.el_style.position}}; {% endif %}
+{% if self.el_style.left %} left:{{self.el_style.left}}; {% endif %}
+{% if self.el_style.top %} top:{{self.el_style.top}}; {% endif %}
+{% if self.el_style.font_size %} font-size:{{self.el_style.font_size}}; {% endif %}
+{% if self.el_style.width %} width:{{self.el_style.width}};{% endif %}
+{% if self.el_style.height %} height:{{self.el_style.height}};{% endif %}
+{% if self.el_style.b_radius %} border-radius:{{self.el_style.b_radius}};{% endif %}
+{% if self.el_style.b_top %} border-top:{{self.el_style.b_top}};{% endif %}
+{% if self.el_style.b_right %} border-right:{{self.el_style.b_right}};{% endif %}
+{% if self.el_style.b_bottom %} border-bottom:{{self.el_style.b_bottom}};{% endif %}
+{% if self.el_style.b_left %} border-left:{{self.el_style.b_left}};{% endif %}
+{% if self.el_style.box_shadow %} box-shadow: {{self.el_style.box_shadow}} ;{% endif %}
+{% if self.el_style.overflow %} overflow: {{self.el_style.overflow}} ;{% endif %}
+{% if self.el_style.color %} color: {{self.el_style.color}}{{self.el_style.color_opacity}} ;{% endif %}
+{% if self.el_style.use_bg_color %} background-color:{{self.el_style.bg_c}}{{self.el_style.bg_color_opacity}};{% endif %} 
+{% if self.el_style.image %}{% image self.el_style.image original format-webp-lossless as img %}
+    background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});
+    background-attachment: {% if self.el_style.paralax %}fixed{% else %}scroll{% endif %}
+{% endif %}

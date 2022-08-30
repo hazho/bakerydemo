@@ -1,0 +1,8 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+     
+        {% for item in self.rows %}
+<div class="row_section   {% include 'includes/mobile_desktop.html' %}"
+  style="{% include 'includes/element_style.html'  %}">
+                {% include "includes/cols_block.html"  %}
+</div>
+{% endfor %}

@@ -1,0 +1,26 @@
+{% load wagtailadmin_tags %}
+
+<div class="{{ classname }}">
+    {% if help_text %}
+        <span> <div class="help">{{ help_text }}</div> </span>
+    {% endif %}
+
+    {% for child in children.values %}
+        <div class="field {% if child.block.required %}required{% endif %}" d_cp="{{ child.block.name }}">
+            {% if child.block.label %}
+                <label class="field__label {{ child.id_for_label }}" {% if child.id_for_label %}for="{{ child.id_for_label }}"{% endif %}>{{ child.block.label }}</label>
+            {% endif %}
+            {% if child.block.name == "bg_c" %}
+              {{ child.render_form }}
+            {% else %}
+              {{ child.render_form }}
+            {% endif %}
+        </div>
+        <script>
+            $(document).ready(function(){
+
+            });
+        </script>
+
+    {% endfor %}
+</div>

@@ -1,0 +1,36 @@
+{% load static %}
+<object id="map_glob" type="image/svg+xml" data="{% static 'svg/map_glob.svg' %}" width="100%"  ></object>
+
+<script>
+  var svgHolder = document.querySelector('object#map_glob');
+  svgHolder.onload = function () {
+      var svgDocument = svgHolder.contentDocument,
+      style = svgDocument.createElementNS("http://www.w3.org/2000/svg", "style"),
+      scr = svgDocument.createElementNS("http://www.w3.org/2000/svg",'script'),
+      svgElem = svgDocument.querySelector('svg'),
+      ids = {{ self.featured|safe }};
+      
+      style.textContent = `
+      svg.glob_map path {stroke: {{ self.b_clr }}; fill: {{ self.bg_c }}; }
+      .land_f {stroke-width: 2.15; fill: {{ self.bg_c_f }} !important; }
+      svg.glob_map path.land_f:hover {fill: {{ self.bg_c_f_h }} !important;stroke-width: 2.5}
+      `;
+      scr.textContent = `
+      
+      function getElementsById(ids) {
+            var id_list = ids.split(",");
+            for (var i = 0; i < id_list.length; i++) {
+              var item = document.getElementById(id_list[i]);
+              item.setAttribute("class","land_f");
+            }
+          } 
+        getElementsById('${ids}');
+      
+      `;
+
+      svgElem.insertBefore(style, svgElem.firstChild);
+      svgElem.insertBefore(scr, svgElem.lastChild);
+    
+      
+  };
+</script>

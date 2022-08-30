@@ -1,0 +1,33 @@
+{% load wagtailimages_tags wagtailcore_tags %}
+
+<style>
+    .circle {border-radius: 50%;box-shadow: 0 0 9px 1px var(--main_color), 0 8px 12px 1px var(--main_color);margin: 0 auto -9px auto;}
+    .p_c_item{margin: 0 auto;}
+    /*  ----------------- grid ----------  */
+        {% if  self.cards|length == 1 %}.p_c_item{max-width:50%;}  .private_card_grid_container {display: grid; grid-gap:.5rem; padding:1rem; box-sizing: border-box; grid-template-columns: auto auto auto;}
+        {% elif self.cards|length == 4 %} .private_card_grid_container {display: grid; grid-gap:.5rem; padding:1rem; box-sizing: border-box; grid-template-columns: auto auto;}
+        {% else %} .private_card_grid_container {display: grid; grid-gap:.5rem; padding:1rem; box-sizing: border-box; grid-template-columns: auto auto auto;}
+        {% endif %}
+        .card_title {height: 3rem;max-height: 3rem;width: 85%;margin: 2rem auto;}
+        .cards_about {text-indent: 0.5rem;}
+        .card_img_top {max-height: 90vh; width: auto;}
+        .card_text_container {margin: 1rem .5rem;}
+        @media only screen and (max-width: 990px){
+            .private_card_grid_container {display: grid;box-sizing: border-box;grid-template-columns: auto;}  
+            .card_title {height: 1rem;max-height: 1rem;width: 85%;margin: 2rem auto;}
+        }
+    /* ------------------ end of grid -------------------- */
+</style>
+<div class="lazyload private_card_grid_container">
+    {% for card in self.cards %}
+            {% image card.img fill-300x300 format-webp-lossless as img %} <img loading="lazy" src="{{ img.url }}" alt="{{ img.alt }}" class="card_img_top circle" />
+            <div class="lazyload card_text_container" style="height:{{self.content_height}}; max-height:{{self.content_height}}">
+                <h4 class="card_title">{{card.title.heading_text}}
+                {% for b in card.title %}
+                    {% if b.name == "heading_text" %}{% include_block b  %}{% endif %}
+                {% endfor %}
+                </h4>
+                <p class="lazyload cards_about">{{card.about.text }}</p>
+            </div>
+    {% endfor %}
+</div>

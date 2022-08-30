@@ -1,0 +1,89 @@
+{% load wagtailimages_tags wagtailcore_tags strings_tags %}
+{% if "%" not in self.el_style.width and "%" not in self.el_style.height %}
+    {% if self.el_style.width|to_int < 100 %}
+        <!-- -1 -->
+        {% image self.image width-75 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 200 %}
+        <!-- 0 -->
+        {% image self.image width-150 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 300 %}
+        <!-- 1 -->
+        {% image self.image width-200 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 400 %}
+        <!-- 2 -->
+        {% image self.image width-300 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 500 %}
+        <!-- 3 -->
+        {% image self.image width-400 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 600 %}
+        <!-- 4 -->
+        {% image self.image width-500 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 700 %}
+        <!-- 5 -->
+        {% image self.image width-600 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 800 %}
+        <!-- 6 -->
+        {% image self.image width-700 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 900 %}
+        <!-- 7 -->
+        {% image self.image width-800 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 1000 %}
+        <!-- 8 -->
+        {% image self.image width-900 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 1200 %}
+        <!-- 9 -->
+        {% image self.image width-1100 format-webp-lossless as img %}
+    {% elif self.el_style.width|to_int < 1400 %}
+        <!-- 10 -->
+        {% image self.image width-1300 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 100 %}
+        <!-- 11 -->
+        {% image self.image height-75 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 200 %}
+        <!-- 12 -->
+        {% image self.image height-150 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 300 %}
+        <!-- 13 -->
+        {% image self.image height-200 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 400 %}
+        <!-- 1 4-->
+        {% image self.image height-300 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 500 %}
+        <!-- 1 5-->
+        {% image self.image height-400 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 600 %}
+        <!-- 16 -->
+        {% image self.image height-500 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 700 %}
+        <!-- 17 -->
+        {% image self.image height-600 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 800 %}
+        <!-- 18 -->
+        {% image self.image height-700 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 900 %}
+        <!-- 19 -->
+        {% image self.image height-800 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 1000 %}
+        <!-- 20 -->
+        {% image self.image height-900 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 1200 %}
+        <!-- 21 -->
+        {% image self.image height-1100 format-webp-lossless as img %}
+    {% elif self.el_style.height|to_int < 1400 %}
+        <!-- 22 -->
+        {% image self.image height-1300 format-webp-lossless as img %}
+    {% else %}
+        <!-- 23 -->
+        {% image self.image original format-webp-lossless as img %}
+    {% endif %}
+{% else %}
+        <!-- 24 -->
+        {% image self.image original format-webp-lossless as img %}
+{% endif %}
+
+{% if self.el_style.el_pg_link %} <a href="{{self.el_style.el_pg_link.url}}" class="link image_container" {% if self.el_style.new_tab %} target="_blank" {% endif %} >
+{% elif self.el_style.el_url_link %} <a href="{{self.el_style.el_url_link}}" class="link image_container" {% if self.el_style.new_tab %} target="_blank" {% endif %} >
+{% endif %} 
+
+<img loading="lazy" src="{{ img.url }}" style="{% include 'includes/element_style.html'  %}" alt="{{ img.alt }}" id="{{self.el_style.el_id}}" class="image_element {{self.el_style.el_class}} {% include 'includes/mobile_desktop.html' %}" />
+</a>

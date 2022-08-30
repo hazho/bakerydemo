@@ -1,0 +1,30 @@
+<script src="https://cdn.jsdelivr.net/gh/minisuperfiles/MSFmultiSelect/msfmultiselect.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/minisuperfiles/MSFmultiSelect/msfmultiselect.min.css" rel="stylesheet"/>
+
+{# please give class-name (multiple_select) #}
+<script>
+  var all_selectors = document.querySelectorAll('.multiple_choice_field  select');
+  console.log('all_selectors: ', all_selectors);
+  for (var i = 0; i < all_selectors.length; i++) {
+
+    if (all_selectors[i].attributes) {
+      console.log(all_selectors[i])
+    } else {
+      console.log("has no attrib..!")
+      console.log(all_selectors[i])
+      
+    }
+  }
+
+  // all_selectors.forEach(function(item, index){
+  //   console.log('each_selector: ',item);
+  //   var select = new MSFmultiSelect(
+  //     item,
+  //     {
+  //       selectAll: true,appendTo: item,searchBox: true,onChange:function(checked, value, instance) {console.log(checked, value, instance);}
+  //     }
+  //   );
+  // });
+  
+</script>
+

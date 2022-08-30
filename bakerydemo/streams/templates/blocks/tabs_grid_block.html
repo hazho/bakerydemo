@@ -1,0 +1,49 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="p_c_grid_block" id="{{self.row_id}}" style="
+{% if self.row_style.text_align %} text-align:{{self.row_style.text_align}};{% endif %}
+{% if self.row_style.direction == rtl %} direction:{{self.row_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+{% if self.row_style.position %} position:{{self.row_style.position}}; {% endif %}
+{% if self.row_style.left %} left:{{self.row_style.left}}; {% endif %}
+{% if self.row_style.top %} top:{{self.row_style.top}}; {% endif %}
+{% if self.row_style.padding %} padding:{{self.row_style.padding}}; {% endif %}
+{% if self.row_style.margin %} margin:{{self.row_style.margin}}; {% endif %}
+{% if self.row_style.font_size %} font-size:{{self.row_style.font_size}}; {% endif %}
+{% if self.row_style.width %} width:{{self.row_style.width}};{% endif %}
+{% if self.row_style.height %} height:{{self.row_style.height}};{% endif %}
+{% if self.row_style.b_radius %} border-radius:{{self.row_style.b_radius}};{% endif %}
+{% if self.row_style.b_top %} border-top:{{self.row_style.b_top}};{% endif %}
+{% if self.row_style.b_right %} border-right:{{self.row_style.b_right}};{% endif %}
+{% if self.row_style.b_bottom %} border-bottom:{{self.row_style.b_bottom}};{% endif %}
+{% if self.row_style.b_left %} border-left:{{self.row_style.b_left}};{% endif %}
+{% if self.row_style.box_shadow %} box-shadow: {{self.row_style.box_shadow}} ;{% endif %}
+{% if self.row_style.overflow %} overflow: {{self.row_style.overflow}} ;{% endif %}
+{% if self.row_style.color %} color: {{self.row_style.color}} ;{% endif %}
+{% if self.row_style.use_bg_color %} background-color:{{self.row_style.bg_c}};{% endif %}
+{% if self.row_style.image %}{% image self.row_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.row_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+">
+    {% for col in self.row.cols %} 
+        <div class="col" 
+        style="float: left; width: {{col.col_style.width}};
+            {% if col.col_style.text_align %} text-align:{{col.col_style.text_align}};{% endif %}
+            {% if col.col_style.direction == rtl %} direction:{{col.col_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+            {% if col.col_style.padding %} padding:{{col.col_style.padding}}; {% endif %}
+            {% if col.col_style.margin %} margin:{{col.col_style.margin}}; {% endif %}
+            {% if col.col_style.font_size %} font-size:{{col.col_style.font_size}}; {% endif %}
+            {% if col.col_style.width %} width:{{col.col_style.width}};{% endif %}
+            {% if col.col_style.height %} height:{{col.col_style.height}};{% endif %}
+            {% if col.col_style.b_radius %} border-radius:{{col.col_style.b_radius}};{% endif %}
+            {% if col.col_style.b_top %} border-top:{{col.col_style.b_top}};{% endif %}
+            {% if col.col_style.b_right %} border-right:{{col.col_style.b_right}};{% endif %}
+            {% if col.col_style.b_bottom %} border-bottom:{{col.col_style.b_bottom}};{% endif %}
+            {% if col.col_style.b_left %} border-left:{{col.col_style.b_left}};{% endif %}
+            {% if col.col_style.box_shadow %} box-shadow: {{col.col_style.box_shadow}} ;{% endif %}
+            {% if col.col_style.overflow %} overflow: {{col.col_style.overflow}} ;{% endif %}
+            {% if col.col_style.color %} color: {{col.col_style.color}} ;{% endif %}
+            {% if col.col_style.use_bg_color %} background-color:{{col.col_style.bg_c}};{% endif %}
+            {% if col.col_style.image %}{% image col.col_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if col.col_style.paralax %}fixed;{% else %}scroll;{% endif %}{% endif %}
+        ">
+           {{ col.col_items}}
+        </div>
+    {% endfor %}
+</div>

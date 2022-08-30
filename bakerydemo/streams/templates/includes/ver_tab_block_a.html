@@ -1,0 +1,49 @@
+{% load wagtailimages_tags  wagtailcore_tags %}
+<style>
+    :root {--color-one: #34D1D1;--color-two: #2F2235;--color-three: #3F3244;--color-four: #F2F2F2;--color-five: #D1D2D3;--color-six: #666666;--color-seven: #000000;--color-eight: #ffffff;}
+
+    .ver_a_accordion {display: flex;flex-wrap: wrap;height: auto;width: 100%;}
+    .ver_a_accordion__content {order: 1;flex-grow: 1;width: 100%;height: 100%;display: none;}
+    .ver_a_accordion__label_{{self.overall_title|slugify|cut:"/"}} {display: block;cursor: pointer;flex-grow: 1;text-align: center;padding: 1% 5% 1% 5%;background-color: var(--second_bg_color);margin-right: 1px;box-shadow: 0 0 3px;}
+    .ver_a_accordion__radio_{{self.overall_title|slugify|cut:"/"}} {display: none;}
+    .ver_a_accordion input[type="radio"] {display: none;}
+    .ver_a_accordion input[type="radio"] + label {color: var(--main_color, #035468);z-index: 1;width:{{self.title_width}};box-sizing: border-box;}
+    .ver_a_accordion input[type="radio"] + label:hover {background-color: var(--second_bg_color, #fff);transition: .8s;}
+    .ver_a_accordion input[type="radio"]:checked + label {background-color: var(--main_bg_color ,#fff);font-weight: 900;border-top: 1px solid var(--color-five);border-left: none;border-right: none;border-bottom: none;width: 100%;box-shadow: none;}
+    .ver_a_accordion input[type="radio"]:checked + label + .ver_a_accordion__content {display: flex;margin-right: 0;border-left: none;border-right: none;border-bottom: 1px solid var(--color-five);transition: width .8s ease-out}
+    ver_a_accordion input[type="radio"]:checked + label span:after  {content: '—';}
+    .ver_a_accordion__content__text {margin: 1%;}
+    .ver_a_accordion p {padding: 0;margin: 0;}
+    .ver_a_accordion .block-paragraph {padding: unset;}
+    .ver_a_accordion__content__text__title {margin-top: 3%;}
+    .ver_a_accordion__content__text__horizontal_line {border: none;border-bottom: 1px solid var(--color-five);margin-right: 2%;width: 100%;}
+    .ver_a_accordion__content__text__body {margin-top: 2%;padding-right: 5%;transition: .8s;}
+    .ver_a_accordion__content__text__body li {list-style: unset;}
+
+    @media (max-width: 900px){
+        .ver_a_accordion {border: 1px solid var(--color-five);}
+        .ver_a_accordion_tab__status {display: inline;}
+        .ver_a_accordion__content,.ver_a_accordion__label_{{self.overall_title|slugify|cut:"/"}}{order: initial;}
+        .ver_a_accordion__content {flex-direction: column;}
+        .ver_a_accordion__label_{{self.overall_title|slugify|cut:"/"}} {width: 100%;margin-right: 0;margin-bottom: 1px;display: flex;justify-content: space-between;font-size: 1.2em;padding: 5% 6% 5% 6%;}
+        .ver_a_accordion__label_{{self.overall_title|slugify|cut:"/"}}:last-child {background-color: magenta;}
+        .ver_a_accordion__content__text {font-size: 0.9em;margin: 4% 5% 4% 5%;transition: .8s;}
+        .ver_a_accordion__content__text__title {margin: 2% 0 2% 0;transition: .8s;}
+        .ver_a_accordion input[type="radio"] + label span:after  {content: '+';}
+        .ver_a_accordion input[type="radio"]:checked + label span:after  {content: '—';}
+        .ver_a_accordion input[type="radio"]:checked + label {border: none; }
+        .ver_a_accordion input[type="radio"]:checked + label + .ver_a_accordion {border: none;  }
+        .ver_a_accordion input[type="radio"]:checked + label + .ver_a_accordion__content {border: none;}
+    }
+</style>
+<div class="ver_a_accordion">
+    {% for item in self.tabs.tab %}
+        {% if forloop.len > 1 %}{{forloop.len}}  {% endif %}{{forloop.len}}
+        <input class='ver_a_accordion__radio_{{self.overall_title|slugify|cut:"/"}}' type="radio" name="ver_a_accordion_tabs_{{self.overall_title|slugify|cut:'/'}}" id='tab-{{item.title.heading_text|slugify|cut:"/"}}_{{self.overall_title|slugify|cut:"/"}}' {% if forloop.counter == 1 %} checked {% endif %}/>
+        <label class='ver_a_accordion__label_{{self.overall_title|slugify|cut:"/"}}' style="{% if item.is_bidi %}direction:rtl !important;unicode-bidi:isolate !important;{% endif %}" for='tab-{{item.title.heading_text|slugify|cut:"/"}}_{{self.overall_title|slugify|cut:"/"}}'> {% if item.title.heading_text %}{{item.title.heading_text}} {% endif %}<span class="ver_a_accordion_tab__status"></span></label>
+
+            <div class="ver_a_accordion__content ver_a_accordion__content__text"> 
+                {% include_block item.body %} 
+            </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,12 @@
+{% load wagtailcore_tags strings_tags %}
+
+<div class="block_paragraph_wrapper {% include 'includes/mobile_desktop.html' %} {{self.el_style.el_class}}"
+    id="{{self.el_style.el_id}}" 
+    {% if self.el_style.hover_styling.title %} title="{{ self.el_style.hover_styling.title }}" {% endif %}
+    style="{% include 'includes/element_style.html' %}"
+    >    
+    <div class="block-paragraph block_paragraph">
+        {{ self.paragraph.source|richtext|replace:"[w5]"|replace:"[w3]"|replace:"[w7]"|replace:"[w9]"|replace:"[sp]"|replace:"[but]"|replace:"[nl]"|replace:"[s.5]"|replace:"[s.8]"|replace:"[s1]"|replace:"[s1.2]"|replace:"[s1.4]"|replace:"[s1.6]"|replace:"[s1.8]"|replace:"[s2]"|replace:"[s2.2]"|replace:"[s2.4]"|replace:"[s2.6]"|replace:"[s2.8]"|replace:"[s3]"|replace:"[s3.2]"|replace:"[s3.4]"|replace:"[s3.6]"|replace:"[s3.8]"|replace:"[s4]"|replace:"[s4.2]"|replace:"[s4.4]"|replace:"[s4.6]"|replace:"[s4.8]"|replace:"[s5]" }}
+
+    </div>
+</div>

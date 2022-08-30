@@ -1,0 +1,37 @@
+<style>
+    #{{ self.el_style.el_id }}:hover {
+        {% if self.el_style.hover_styling.h_text_align %} text-align:{{self.el_style.hover_styling.h_text_align}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_padding %} padding:{{self.el_style.hover_styling.h_padding}} !important; {% endif %}
+        {% if self.el_style.hover_styling.h_margin %} margin:{{self.el_style.hover_styling.h_margin}} !important; {% endif %}
+        {% if self.el_style.hover_styling.h_font_size %} font-size:{{self.el_style.hover_styling.h_font_size}} !important; {% endif %}
+        width:{{self.el_style.hover_styling.h_width}} !important; height:{{self.el_style.hover_styling.h_height}} !important;
+        {% if self.el_style.hover_styling.h_b_radius %} border-radius:{{self.el_style.hover_styling.h_b_radius}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_b_top %} border-top:{{self.el_style.hover_styling.h_b_top}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_b_right %} border-right:{{self.el_style.hover_styling.h_b_right}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_b_bottom %} border-bottom:{{self.el_style.hover_styling.h_b_bottom}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_b_left %} border-left:{{self.el_style.hover_styling.h_b_left}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_box_shadow %} box-shadow: {{self.el_style.hover_styling.h_box_shadow}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_color %} color: {{self.el_style.hover_styling.h_color}}{{self.el_style.hover_styling.h_color_opacity}} !important;{% endif %}
+        {% if self.el_style.hover_styling.h_use_bg_color %} background-color:{{self.el_style.hover_styling.h_bg_c}}{{self.el_style.hover_styling.h_bg_color_opacity}} !important;{% endif %}
+    }
+</style>
+<p id="{{self.el_style.el_id}}" class="{{self.el_style.el_class}} {% include 'includes/mobile_desktop.html' %}" style="{% include 'includes/element_style.html' %} "></p>
+
+<script>
+  var i_{{self.el_style.el_id}} = 0;
+  var elem_{{self.el_style.el_id}} = document.getElementById("{{self.el_style.el_id}}");
+  var txt_{{self.el_style.el_id}} = '{{self.text}}'; /* The text */
+  
+  function typeWriter_{{self.el_style.el_id}}() {
+      if (i_{{self.el_style.el_id}} < txt_{{self.el_style.el_id}}.length) {
+        elem_{{self.el_style.el_id}}.innerHTML += txt_{{self.el_style.el_id}}.charAt(i_{{self.el_style.el_id}}) ;
+        i_{{self.el_style.el_id}}++;
+        setTimeout(typeWriter_{{self.el_style.el_id}}, {{self.speed}});
+      }
+  }
+
+  var to = 1000 * "{{self.text}}".length + 1;
+(function ff() {setInterval(typeWriter_{{self.el_style.el_id}}, {{self.interval}} * 1000 )})();
+  
+</script>
+    

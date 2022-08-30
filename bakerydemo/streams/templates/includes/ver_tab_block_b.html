@@ -1,0 +1,67 @@
+{% load wagtailimages_tags  wagtailcore_tags %}
+
+<style>
+    .ver_b_accordion {background-color: #eee;color: var(--main_color, #035468);cursor: pointer;padding: 18px;width: 100%;border: none;text-align: left;outline: none;font-size: 15px;box-shadow: 0 0 3px;}
+    .active, .ver_b_accordion:hover {background-color: var(--main_bg_color, #fff);}
+    .ver_b_accordion:after {content: '\002B';color: #777;font-weight: bold;float: right;margin-left: 5px;}
+    .ver_b_accordion.active:after {content: "\2212";}
+    .tab_contents {background-color: white;max-height: 0;overflow: hidden;transition: max-height .4s ease-out, padding .4s ease-out}
+    .ver_tab_b_text_cont li {list-style: unset;}
+    
+    /*  ----------------- grid ----------  */
+        .ver_tab_b_grid_container {display: grid;box-sizing: border-box;grid-template-columns: minmax(auto, 40%) auto;}
+
+    @media only screen and (max-width: 775px){
+        .ver_tab_b_grid_container {display: grid;box-sizing: border-box;grid-template-columns: auto;}  
+    }
+    /* ------------------ end of grid -------------------- */
+</style>
+
+{% for item in self.tabs.tab %}
+    <button class="ver_b_accordion" 
+    style="
+      {% if item.title.el_style.text_align %} text-align:{{item.title.el_style.text_align}};{% endif %}
+      {% if item.title.el_style.direction == rtl %} direction:{{item.title.el_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+      {% if item.title.el_style.padding %} padding:{{item.title.el_style.padding}}; {% endif %}
+      {% if item.title.el_style.margin %} margin:{{item.title.el_style.margin}}; {% endif %}
+      {% if item.title.el_style.font_size %} font-size:{{item.title.el_style.font_size}}; {% endif %}
+      {% if item.title.el_style.width %} width:{{item.title.el_style.width}};{% endif %}
+      {% if item.title.el_style.height %} height:{{item.title.el_style.height}};{% endif %}
+      {% if item.title.el_style.b_radius %} border-radius:{{item.title.el_style.b_radius}};{% endif %}
+      {% if item.title.el_style.b_top %} border-top:{{item.title.el_style.b_top}};{% endif %}
+      {% if item.title.el_style.b_right %} border-right:{{item.title.el_style.b_right}};{% endif %}
+      {% if item.title.el_style.b_bottom %} border-bottom:{{item.title.el_style.b_bottom}};{% endif %}
+      {% if item.title.el_style.b_left %} border-left:{{item.title.el_style.b_left}};{% endif %}
+      {% if item.title.el_style.box_shadow %} box-shadow: {{item.title.el_style.box_shadow}} ;{% endif %}
+      {% if item.title.el_style.overflow %} overflow: {{item.title.el_style.overflow}} ;{% endif %}
+      {% if item.title.el_style.color %} color: {{item.title.el_style.color}}{{item.title.el_style.color_opacity}} ;{% endif %}
+      {% if item.title.el_style.use_bg_color %} background-color:{{item.title.el_style.bg_c}}{{item.title.el_style.bg_color_opacity}};{% endif %}
+      {% if item.title.el_style.image %}{% image item.title.el_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if item.title.el_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+      
+    ">
+    {% if item.title.heading_text %}{{item.title.heading_text|cut:"/"}} {% endif %}
+    </button>
+    
+    <div class="tab_contents" >
+            {% include_block item.body %}
+    </div>
+{% endfor %}
+
+<script>
+  var acc = document.getElementsByClassName("ver_b_accordion");
+  var i;
+  for (i = 0; i < acc.length; i++) {
+    {% comment %} acc[0].nextElementSibling.style.maxHeight = '100%'; {% endcomment %}
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+        panel.style.padding = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + 5 + "px";
+        panel.style.padding = " .5em 1em";
+      } 
+    });
+  }
+</script>

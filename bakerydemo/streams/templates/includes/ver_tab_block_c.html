@@ -1,0 +1,36 @@
+{% load wagtailcore_tags wagtailimages_tags static %}
+<link rel="stylesheet" href="{% static 'accord_tabs/vert_tab_c.css' %}?version=0.000001"> 
+<div class="tabs_container">
+  <div class="title_wrapper col3" >
+        {% for item in self.tabs.tab %}
+          <div style="
+            {% if item.title.el_style.text_align %} text-align:{{item.title.el_style.text_align}};{% endif %}
+            {% if item.title.el_style.direction == rtl %} direction:{{item.title.el_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+            {% if item.title.el_style.padding %} padding:{{item.title.el_style.padding}}; {% endif %}
+            {% if item.title.el_style.margin %} margin:{{item.title.el_style.margin}}; {% endif %}
+            {% if item.title.el_style.font_size %} font-size:{{item.title.el_style.font_size}}; {% endif %}
+            {% if item.title.el_style.width %} width:{{item.title.el_style.width}};{% endif %}
+            {% if item.title.el_style.height %} height:{{item.title.el_style.height}};{% endif %}
+            {% if item.title.el_style.b_radius %} border-radius:{{item.title.el_style.b_radius}};{% endif %}
+            {% if item.title.el_style.b_top %} border-top:{{item.title.el_style.b_top}};{% endif %}
+            {% if item.title.el_style.b_right %} border-right:{{item.title.el_style.b_right}};{% endif %}
+            {% if item.title.el_style.b_bottom %} border-bottom:{{item.title.el_style.b_bottom}};{% endif %}
+            {% if item.title.el_style.b_left %} border-left:{{item.title.el_style.b_left}};{% endif %}
+            {% if item.title.el_style.box_shadow %} box-shadow: {{item.title.el_style.box_shadow}} ;{% endif %}
+            {% if item.title.el_style.overflow %} overflow: {{item.title.el_style.overflow}} ;{% endif %}
+            {% if item.title.el_style.color %} color: {{item.title.el_style.color}} ;{% endif %}
+            {% if item.title.el_style.use_bg_color %} background-color:{{item.title.el_style.bg_c}};{% endif %}
+            {% if item.title.el_style.image %}{% image item.title.el_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if item.title.el_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+          " class="tablinks"  onclick="openTab(event, 'tc_{{forloop.counter}}')" id="{% if forloop.counter == 1 %}defaultOpen{% endif %}">{{item.title.heading_text}}</div>
+        {% endfor %}
+  </div>
+  <div class="tabcontents_wrapper col9">
+      {% for item in self.tabs.tab %}
+        <div id="tc_{{forloop.counter}}" class="tabcontent">
+            {% include_block item.body %}
+        </div>
+      {% endfor %}
+  </div>
+</div>
+  
+<script src="{% static 'accord_tabs/vert_tab_c.js' %}"></script> 

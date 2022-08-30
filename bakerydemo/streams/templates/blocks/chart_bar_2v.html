@@ -1,0 +1,51 @@
+{% load  wagtailimages_tags %}
+   
+<div class="piechart" id="{{ self.el_styles.el_id}}" style="
+    {% if self.el_styles.text_align %} text-align:{{self.el_styles.text_align}};{% endif %}
+    {% if self.el_styles.z_index %} z-index:{{self.el_styles.z_index}};{% endif %}
+    {% if self.el_styles.floating %} float:{{self.el_styles.floating}}; {% endif %}
+    {% if self.el_styles.direction == rtl %} direction:{{self.el_styles.direction}}; unicode-bidi: isolate !important;{% endif %}
+    {% if self.el_style.position %} position:{{self.el_style.position}}; {% endif %}
+    {% if self.el_style.left %} left:{{self.el_style.left}}; {% endif %}
+    {% if self.el_style.top %} top:{{self.el_style.top}}; {% endif %}
+    {% if self.el_styles.padding %} padding:{{self.el_styles.padding}}; {% endif %}
+    {% if self.el_styles.margin %} margin:{{self.el_styles.margin}}; {% endif %}
+    {% if self.el_styles.font_size %} font-size:{{self.el_styles.font_size}}; {% endif %}
+    {% if self.el_styles.width %} width:{{self.el_styles.width}};{% endif %}
+    {% if self.el_styles.height %} height:{{self.el_styles.height}};{% endif %}
+    {% if self.el_styles.b_radius %} border-radius:{{self.el_styles.b_radius}};{% endif %}
+    {% if self.el_styles.b_top %} border-top:{{self.el_styles.b_top}};{% endif %}
+    {% if self.el_styles.b_right %} border-right:{{self.el_styles.b_right}};{% endif %}
+    {% if self.el_styles.b_bottom %} border-bottom:{{self.el_styles.b_bottom}};{% endif %}
+    {% if self.el_styles.b_left %} border-left:{{self.el_styles.b_left}};{% endif %}
+    {% if self.el_styles.box_shadow %} box-shadow: {{self.el_styles.box_shadow}} ;{% endif %}
+    {% if self.el_styles.overflow %} overflow: {{self.el_styles.overflow}} ;{% endif %}
+    {% if self.el_styles.color %} color: {{self.el_styles.color}}{{self.el_styles.color_opacity}} ;{% endif %}
+    {% if self.el_styles.use_bg_color %} background-color:{{self.el_styles.bg_c}}{{self.el_styles.bg_color_opacity}};{% endif %} 
+    {% if self.el_styles.image %}{% image self.el_styles.image original format-webp-lossless as img %}
+        background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});
+        background-attachment: {% if self.el_styles.paralax %}fixed{% else %}scroll{% endif %}
+    {% endif %}
+        "></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    // Load google charts
+    google.charts.load('current', {'packages':['imagebarchart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Draw the chart and set the chart values
+    function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+    ['title', 'value1', 'value2'],{% for item in self.charts.chart %}['{{ item.title }}', {{ item.value1 }}, {{ item.value2 }}],{% endfor %}
+    ]);
+
+    // Optional; add a title and set the width and height of the chart
+    var options = {'title':'','isVertical':'true', 'width':{{ self.el_styles.width }}, 'height':{{ self.el_styles.height }}};
+
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.ImageBarChart(document.getElementById('{{ self.el_styles.el_id}}'));
+    chart.draw(data, options);
+    }
+</script>

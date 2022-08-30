@@ -1,0 +1,81 @@
+{% load  wagtailimages_tags %}
+
+ <style>
+  .c_inner {transition: transform 0.8s cubic-bezier(0.83, 0.16, 0.13, 0.65);transform-style: preserve-3d;}
+  .c_front{position: absolute;}
+  .c_flip {background-color: transparent;perspective: 1000px;width:312;height: 180;object-fit: cover;object-position: center;}
+  .c_flip:hover .c_inner {transform: rotateY(180deg);}
+  .c_front, .c_back {background-color:white;
+    {% if self.el_style.use_bg_color %} background-color:{{self.el_style.bg_c}}{{self.el_style.bg_color_opacity}};{% endif %}
+    width: 100%;height: 100%;backface-visibility: hidden;}
+  h2.c_title {color: unset}
+  .c_icon {margin: .25em 0;font-size: 3em}
+  .c_back {transform: rotateY(180deg);position: relative;}
+  .c_back p {height: 100%;display:-webkit-box;-webkit-box-align:center;}
+  @media screen and (max-width: 320px) {.c_flip {width:314}}
+  @media screen and (max-width: 375px) {.c_flip {width:367}}
+  @media screen and (max-width: 425px) {.c_flip {width:416}}
+  #{{ self.el_style.el_id }}:hover, #{{ self.el_style.el_id }}:hover * {
+    {% if self.el_style.hover_styling.h_text_align %} text-align:{{self.el_style.hover_styling.h_text_align}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_padding %} padding:{{self.el_style.hover_styling.h_padding}} !important; {% endif %}
+    {% if self.el_style.hover_styling.h_margin %} margin:{{self.el_style.hover_styling.h_margin}} !important; {% endif %}
+    {% if self.el_style.hover_styling.h_font_size %} font-size:{{self.el_style.hover_styling.h_font_size}} !important; {% endif %}
+    {% if self.el_style.hover_styling.width %} width:{{self.el_style.hover_styling.width}};{% endif %}
+    {% if self.el_style.hover_styling.height %} height:{{self.el_style.hover_styling.height}};{% endif %}
+    {% if self.el_style.hover_styling.h_b_radius %} border-radius:{{self.el_style.hover_styling.h_b_radius}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_b_top %} border-top:{{self.el_style.hover_styling.h_b_top}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_b_right %} border-right:{{self.el_style.hover_styling.h_b_right}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_b_bottom %} border-bottom:{{self.el_style.hover_styling.h_b_bottom}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_b_left %} border-left:{{self.el_style.hover_styling.h_b_left}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_box_shadow %} box-shadow: {{self.el_style.hover_styling.h_box_shadow}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_color %} color: {{self.el_style.hover_styling.h_color}}{{self.el_style.hover_styling.h_color_opacity}} !important;{% endif %}
+    {% if self.el_style.hover_styling.h_use_bg_color %} background-color:{{self.el_style.hover_styling.h_bg_c}}{{self.el_style.hover_styling.h_bg_color_opacity}} !important;{% endif %}
+}
+</style>
+{% if self.el_style.el_pg_link %} <a href="{{self.el_style.el_pg_link.url}}" class="link image_container" {% if self.el_style.new_tab %} target="_blank" {% endif %} >
+{% elif self.el_style.el_url_link %} <a href="{{self.el_style.el_url_link}}" class="link image_container" {% if self.el_style.new_tab %} target="_blank" {% endif %} >
+{% endif %} 
+
+  <div class="c_flip {{ self.el_style.el_class }}" style="
+  {% if self.el_style.width %} width:{{self.el_style.width}};{% endif %}
+  {% if self.el_style.height %} height:{{self.el_style.height}};{% endif %}
+  {% if self.el_style.text_align %} text-align:{{self.el_style.text_align}};{% endif %}
+  {% if self.el_style.z_index %} z-index:{{self.el_style.z_index}};{% endif %}
+  {% if self.el_style.transform %} transform:{{self.el_style.transform}};{% endif %}
+  {% if not self.el_style.floating == 'none' %} float:{{self.el_style.floating}}; {% endif %}
+  {% if self.el_style.padding %} padding:{{self.el_style.padding}}; {% endif %}
+  margin: 1%;
+  {% if self.el_style.margin %} margin:{{self.el_style.margin}}; {% endif %}
+  {% if self.el_style.position %} position:{{self.el_style.position}}; {% endif %}
+  {% if self.el_style.left %} left:{{self.el_style.left}}; {% endif %}
+  {% if self.el_style.top %} top:{{self.el_style.top}}; {% endif %}
+  {% if self.el_style.font_size %} font-size:{{self.el_style.font_size}}; {% endif %}
+  {% if self.el_style.b_radius %} border-radius:{{self.el_style.b_radius}};{% endif %}
+  {% if self.el_style.b_top %} border-top:{{self.el_style.b_top}};{% endif %}
+  {% if self.el_style.b_right %} border-right:{{self.el_style.b_right}};{% endif %}
+  {% if self.el_style.b_bottom %} border-bottom:{{self.el_style.b_bottom}};{% endif %}
+  {% if self.el_style.b_left %} border-left:{{self.el_style.b_left}};{% endif %}
+  {% if self.el_style.box_shadow %} box-shadow: {{self.el_style.box_shadow}} ;{% endif %}
+  overflow: hidden;
+  {% if self.el_style.color %} color: {{self.el_style.color}}{{self.el_style.color_opacity}} ;{% endif %}
+  background-color:white;
+    {% if self.el_style.use_bg_color %} background-color:{{self.el_style.bg_c}}{{self.el_style.bg_color_opacity}};{% endif %} 
+      
+" id="{{self.el_style.el_id}}" class="icon_title_desc_card {{self.el_style.el_class}} {% include 'includes/mobile_desktop.html' %}">
+    <div class="c_inner">
+      <div class="c_front" style="
+        {% if self.el_style.image %}{% image self.el_style.image original format-webp-lossless as img %}
+        background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});
+        background-attachment: {% if self.el_style.paralax %}fixed{% else %}scroll{% endif %}
+        {% endif %}
+      ">
+        <div class="c_icon">{{ self.icon }}</div>
+        <h3 class="c_title">{{ self.title }}</h3>
+      </div>
+      <div class="c_back">
+        <p class="c_desc">{{ self.desc }}</p>
+      </div>
+    </div>
+  </div>
+</a>
+

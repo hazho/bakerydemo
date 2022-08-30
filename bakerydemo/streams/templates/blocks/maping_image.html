@@ -1,0 +1,38 @@
+{% load wagtailimages_tags wagtailcore_tags %}
+<div class="img_map_wrapper {% if self.img.el_style.no_desktop and self.img.el_style.no_mobile %}no_desktop no_mobile{% elif self.img.el_style.no_desktop %}no_desktop{% elif self.img.el_style.no_mobile %}no_mobile{% endif %}">
+    {% image self.img.image original format-webp-lossless as i %}
+    <img loading="lazy" src="{{ i.url }}" usemap="#{{ self.img.el_style.el_id }}" alt="{{ i.alt }}" id="{{ self.img.el_style.el_id }}" class="image_element {{ self.img.el_style.el_class }} {% include 'includes/mobile_desktop.html' %}" 
+        style="
+            {% if self.img.el_style.text_align %} text-align:{{self.img.el_style.text_align}};{% endif %}
+            {% if self.img.el_style.z_index %} z-index:{{self.img.el_style.z_index}};{% endif %}
+            {% if self.img.el_style.floating %} float:{{self.img.el_style.floating}}; {% endif %}
+            {% if self.img.el_style.direction == rtl %} direction:{{self.img.el_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+            {% if self.img.el_style.position %} position:{{self.img.el_style.position}}; {% endif %}
+            {% if self.img.el_style.left %} left:{{self.img.el_style.left}}; {% endif %}
+            {% if self.img.el_style.top %} top:{{self.img.el_style.top}}; {% endif %}
+            {% if self.img.el_style.padding %} padding:{{self.img.el_style.padding}}; {% endif %}
+            {% if self.img.el_style.margin %} margin:{{self.img.el_style.margin}}; {% endif %}
+            {% if self.img.el_style.position %} position:{{self.img.el_style.position}}; {% endif %}
+            {% if self.img.el_style.left %} left:{{self.img.el_style.left}}; {% endif %}
+            {% if self.img.el_style.top %} top:{{self.img.el_style.top}}; {% endif %}
+            {% if self.img.el_style.font_size %} font-size:{{self.img.el_style.font_size}}; {% endif %}
+            {% if self.img.el_style.width %} width:{{self.img.el_style.width}};{% endif %}
+            {% if self.img.el_style.height %} height:{{self.img.el_style.height}};{% endif %}
+            {% if self.img.el_style.b_radius %} border-radius:{{self.img.el_style.b_radius}};{% endif %}
+            {% if self.img.el_style.b_top %} border-top:{{self.img.el_style.b_top}};{% endif %}
+            {% if self.img.el_style.b_right %} border-right:{{self.img.el_style.b_right}};{% endif %}
+            {% if self.img.el_style.b_bottom %} border-bottom:{{self.img.el_style.b_bottom}};{% endif %}
+            {% if self.img.el_style.b_left %} border-left:{{self.img.el_style.b_left}};{% endif %}
+            {% if self.img.el_style.box_shadow %} box-shadow: {{self.img.el_style.box_shadow}} ;{% endif %}
+            {% if self.img.el_style.overflow %} overflow: {{self.img.el_style.overflow}} ;{% endif %}
+            {% if self.img.el_style.color %} color: {{self.img.el_style.color}}{{self.img.el_style.color_opacity}} ;{% endif %}
+            {% if self.img.el_style.use_bg_color %} background-color:{{self.img.el_style.bg_c}}{{self.img.el_style.bg_color_opacity}};{% endif %} 
+            {% if self.img.el_style.image %}{% image self.img.el_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.img.el_style.paralax %}fixed{% else %}scroll{% endif %}
+            {% endif %}
+        " />
+    <map name="{{ self.img.el_style.el_id }}">
+        {% for map in self.mapings %}
+            <area class="click_map" shape="rect" coords="{{ map.maping.coord}}" alt="{{ map.maping.map_name }}" href="{{ map.maping.pg_link.url}}">
+        {% endfor %}
+    </map>
+</div>

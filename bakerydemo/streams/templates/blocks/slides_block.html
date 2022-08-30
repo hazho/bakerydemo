@@ -1,0 +1,38 @@
+{% load wagtailimages_tags %}
+<style>
+    .slide_texts {position: sticky;top: 35%;background: #f0ffff80; color: var(--main_color, #035468);text-align: center;text-shadow: 1px 1px 2px white, 2px 2px 4px grey;margin: 0 auto;padding:5%;}
+    .slide_title {font-size:4rem;}
+    .carousel_item{background-attachment: unset;background-position: center;background-repeat: no-repeat;background-size: cover;}
+</style>
+
+<div class="inner_cont" style="min-height: {{self.min_height}}">
+    {% for item in self.slide %}
+    {% if item.caroslide.link %}<a href="{{item.caroslide.link}}" class="block_slide">{% else %} <div class="block_slide">{% endif %}
+            {% image item.caroslide.img max-1400x800 format-webp-lossless as iimmgg %}
+            <div class="carousel_item{% if forloop.counter == 1 %} active{% endif %}" style="min-height: {{self.min_height}}; background-image: url({{iimmgg.url}})">
+                {% if item.caroslide.slide_title or item.caroslide.slide_text %}
+                    <div class="slide_texts">
+                        {% if item.caroslide.slide_title %} <div class="slide_title">{{item.caroslide.slide_title}}</div> {% endif %}
+                        {% if item.caroslide.slide_text %} <p class="slide_description">{{item.caroslide.slide_text}}</p> {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </a></div>
+    {% endfor %}
+</div>
+
+<script>
+    var block_slide_indexValue = 0;
+    function blockSlideShow(){
+        setTimeout(blockSlideShow, {{self.sliding_speed}});
+        var i;
+        const slideItem = document.querySelectorAll(".block_slide");
+        for(i = 0; i < slideItem.length; i++){
+        slideItem[i].style.display = "none";
+        }
+        block_slide_indexValue++;
+        if(block_slide_indexValue > slideItem.length){block_slide_indexValue = 1}
+        slideItem[block_slide_indexValue -1].style.display = "block";
+    }
+    blockSlideShow();
+</script>

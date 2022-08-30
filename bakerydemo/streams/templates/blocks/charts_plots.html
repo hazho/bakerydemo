@@ -1,0 +1,31 @@
+{% load wagtailcore_tags %}
+<div class="cont" style="
+
+{% if self.c_style.text_align %} text-align:{{self.c_style.text_align}};{% endif %}
+{% if self.c_style.z_index %} z-index:{{self.c_style.z_index}};{% endif %}
+{% if self.c_style.transform %} transform:{{self.c_style.transform}};{% endif %}
+{% if self.c_style.floating %} float:{{self.c_style.floating}}; {% endif %}
+{% if self.c_style.padding %} padding:{{self.c_style.padding}}; {% endif %}
+{% if self.c_style.margin %} margin:{{self.c_style.margin}}; {% endif %}
+{% if self.c_style.position %} position:{{self.c_style.position}}; {% endif %}
+{% if self.c_style.left %} left:{{self.c_style.left}}; {% endif %}
+{% if self.c_style.top %} top:{{self.c_style.top}}; {% endif %}
+{% if self.c_style.font_size %} font-size:{{self.c_style.font_size}}; {% endif %}
+{% if self.c_style.width %} width:{{self.c_style.width}};{% endif %}
+{% if self.c_style.height %} height:{{self.c_style.height}};{% endif %}
+{% if self.c_style.b_radius %} border-radius:{{self.c_style.b_radius}};{% endif %}
+{% if self.c_style.b_top %} border-top:{{self.c_style.b_top}};{% endif %}
+{% if self.c_style.b_right %} border-right:{{self.c_style.b_right}};{% endif %}
+{% if self.c_style.b_bottom %} border-bottom:{{self.c_style.b_bottom}};{% endif %}
+{% if self.c_style.b_left %} border-left:{{self.c_style.b_left}};{% endif %}
+{% if self.c_style.box_shadow %} box-shadow: {{self.c_style.box_shadow}} ;{% endif %}
+{% if self.c_style.overflow %} overflow: {{self.c_style.overflow}} ;{% endif %}
+{% if self.c_style.color %} color: {{self.c_style.color}}{{self.c_style.color_opacity}} ;{% endif %}
+{% if self.c_style.use_bg_color %} background-color:{{self.c_style.bg_c}}{{self.c_style.bg_color_opacity}};{% endif %} 
+{% comment %} {% if self.c_style.image %}{% image self.c_style.image original format-webp-lossless as img %}
+    background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});
+    background-attachment: {% if self.c_style.paralax %}fixed{% else %}scroll{% endif %}
+{% endif %} {% endcomment %}
+" >
+{% include_block self.c_type %}
+</div>

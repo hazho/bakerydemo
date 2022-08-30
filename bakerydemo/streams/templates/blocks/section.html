@@ -1,0 +1,16 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'blocks/summary_detail_sections.css' %}"> 
+<div id="{{self.section_style.el_id}}" class="section_content {{ self.section_style.el_class }} {% if self.row_style.no_desktop and self.row_style.no_mobile %}no_desktop no_mobile{% elif self.row_style.no_desktop %}no_desktop{% elif self.row_style.no_mobile %}no_mobile{% endif %}"
+ style="">
+  <h2 title="Click me to fetch the data" id="one" class="section_title center">{{self.section_title}}</h2>
+  <div class="tab" >
+    {% for item in self.sections.section %}
+      <div id="{{self.section_style.el_id}}_{{forloop.counter}}">
+        <details>
+          <summary>{{ item.summary }}</summary>
+          <p>{{ item.details|safe }}</p>
+        </details>
+      </div>
+    {% endfor %}
+  </div>
+</div>

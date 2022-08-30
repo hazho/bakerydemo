@@ -1,0 +1,15 @@
+{% load wagtailimages_tags %}
+
+{% if self.template == 'vert_a' %}
+<!-- ver_tab_block_a -->
+    {% include 'includes/ver_tab_block_a.html'  %}    
+{% elif self.template == 'vert_b' %}
+<!-- ver_tab_block_b -->
+    {% include 'includes/ver_tab_block_b.html'  %}   
+{% elif self.template == 'vert_c' %}
+<!-- ver_tab_block_c -->
+    {% include 'includes/ver_tab_block_c.html'  %}
+{% else %}
+<!-- hor_tab_block_a -->
+    {% include 'includes/hor_tab_block_a.html'  %}    
+{% endif %}

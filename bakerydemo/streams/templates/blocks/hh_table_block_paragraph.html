@@ -1,0 +1,5 @@
+{% load wagtailcore_tags strings_tags %}
+
+<div class="block-paragraph">
+    {{ self.source|richtext|replace:"[w5]"|replace:"[w3]"|replace:"[w7]"|replace:"[w9]"|replace:"[sp]"|replace:"[but]"|replace:"[nl]"|replace:"[s1]"|replace:"[s1.2]"|replace:"[s1.4]"|replace:"[s1.6]"|replace:"[s1.8]"|replace:"[s2]"|replace:"[s2.2]"|replace:"[s2.4]"|replace:"[s2.6]"|replace:"[s2.8]"|replace:"[s3]"|replace:"[s3.2]"|replace:"[s3.4]"|replace:"[s3.6]"|replace:"[s3.8]"|replace:"[s4]"|replace:"[s4.2]"|replace:"[s4.4]"|replace:"[s4.6]"|replace:"[s4.8]"|replace:"[s5]"|replace:"[s5.2]"|replace:"[s5.4]"|replace:"[s5.6]"|replace:"[s5.8]"|replace:"[s6]"|replace:"[s6.2]"|replace:"[s6.4]"|replace:"[s6.6]"|replace:"[s6.8]"|replace:"[s7]" }}
+</div>

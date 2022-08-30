@@ -1,0 +1,59 @@
+{% load table_block_tags wagtailimages_tags site_tags static %}
+<link rel="stylesheet" href="s{% static 'table_block.css' %}v=0"> 
+<table style="{% include 'includes/element_style.html' %} ">
+    {% if self.table.table_caption %}
+       <caption>{{ table_caption }}</caption>
+    {% endif %}
+    {% comment %} {% if self.table.first_row_is_table_header %}  {% endcomment %}
+        <thead>
+        <tr>
+            {% for row in self.table.data %}
+            {% with forloop.counter0 as col_index %}
+                {% if forloop.counter == 1 %}
+                {% for column in row %}
+                <th scope="col" {% cell_classname 0 col_index %}>
+                    {% if not column is None %}{{ column }}{% endif %}
+                </th>
+                {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% endfor %}
+        </tr>
+        </thead>
+    {% comment %} {% endif %} {% endcomment %}
+    <tbody>
+    {% for row in self.table.data %}
+    {% if not forloop.counter == 1 %}
+        {% with forloop.counter0 as row_index %}
+            <tr>
+                {% for column in row %}
+                {% with forloop.counter0 as col_index %}
+                    {% if first_col_is_header and forloop.first %}
+                        <th scope="row" {% cell_classname row_index col_index table_header %}>
+                            {% if column.strip %}
+                                {% if html_renderer %}
+                                    {{ column.strip|safe|linebreaksbr }}
+                                {% else %}
+                                    {{ column.strip|linebreaksbr }}
+                                {% endif %}
+                            {% endif %}
+                        </th>
+                    {% else %}
+                        <td {% cell_classname row_index col_index table_header %}>
+                            {% if column.strip %}
+                                {% if html_renderer %}
+                                    {{ column.strip|safe|linebreaksbr }}
+                                {% else %}
+                                    {{ column.strip|linebreaksbr }}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                {% endwith %}
+                {% endfor %}
+            </tr>
+        {% endwith %}
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>

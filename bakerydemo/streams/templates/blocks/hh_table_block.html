@@ -1,0 +1,6 @@
+{% load wagtailcore_tags site_tags %}
+<style>
+  #{{ self.el_style.el_id }} table { {% include 'includes/element_style.html'  %} }
+  #{{ self.el_style.el_id }} thead, #{{ self.el_style.el_id }} th {color: var(--second_bg_color);background-color: {{ self.el_style.color }};border-bottom: 5px ridge var(--second_bg_color);}
+</style>
+<div id="{{ self.el_style.el_id }}">{% include_block self.table %}</div>

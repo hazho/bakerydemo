@@ -1,0 +1,18 @@
+
+{% if self.el_style %} /* there is el_style */{% endif %}
+{% if self.el_style.hover_styling %} /* there is el_style_hover */{% endif %}
+{% if self.el_style.hover_styling.h_text_align %} text-align:{{self.el_style.hover_styling.h_text_align}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_padding %} padding:{{self.el_style.hover_styling.h_padding}} !important; {% endif %}
+{% if self.el_style.hover_styling.h_margin %} margin:{{self.el_style.hover_styling.h_margin}} !important; {% endif %}
+{% if self.el_style.hover_styling.h_font_size %} font-size:{{self.el_style.hover_styling.h_font_size}} !important; {% endif %}
+{% if self.el_style.hover_styling.h_width %} width:{{self.el_style.hover_styling.h_width}} !important; {% endif %}
+{% if self.el_style.hover_styling.h_height %}height:{{self.el_style.hover_styling.h_height}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_b_radius %} border-radius:{{self.el_style.hover_styling.h_b_radius}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_b_top %} border-top:{{self.el_style.hover_styling.h_b_top}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_b_right %} border-right:{{self.el_style.hover_styling.h_b_right}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_b_bottom %} border-bottom:{{self.el_style.hover_styling.h_b_bottom}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_b_left %} border-left:{{self.el_style.hover_styling.h_b_left}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_box_shadow %} box-shadow: {{self.el_style.hover_styling.h_box_shadow}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_color %} color: {{self.el_style.hover_styling.h_color}}{{self.el_style.hover_styling.h_color_opacity}} !important;{% endif %}
+{% if self.el_style.hover_styling.h_use_bg_color %} background-color:{{self.el_style.hover_styling.h_bg_c}}{{self.el_style.hover_styling.h_bg_color_opacity}} !important;{% endif %}
+

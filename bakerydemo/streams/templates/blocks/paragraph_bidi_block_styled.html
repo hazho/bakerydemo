@@ -1,0 +1,21 @@
+{% load wagtailcore_tags strings_tags %}
+<style>
+    .block-rtl_paragraph{padding:.5rem; text-align: right; direction: rtl !important;unicode-bidi: isolate !important;}
+    .block-rtl_paragraph li {list-style: unset;}
+    .responsive-object {padding: 0 !important;}
+    iframe {width: 100%;height: 600px;}
+    .block-paragraph{padding:.125rem}
+    .block-paragraph li {list-style: unset;}
+    .responsive-object {padding: 0 !important;}
+    @media screen and (max-width: 500px) {.block-paragraph {padding: .125rem;}}
+    @media screen and (max-width: 775px) {.block-paragraph {padding: .35rem;}}
+    img.richtext-image.left, img.richtext-image.right {margin: 0.2rem 1rem;box-shadow: 0 0 4px black;}
+    img.richtext-image.left {float: left;}
+    img.richtext-image.right {float: right;}
+    img.richtext-image.full-width {width: 100%;height: auto;padding: 1rem 0;box-sizing: border-box;margin: 0 -1.5rem;}
+</style>
+<div class="block_paragraph_wrapper" style=" {% include 'includes/element_style.html' %} " >
+    <div class="block-rtl_paragraph">
+        {{ self.paragraph|richtext }}
+    </div>
+</div>

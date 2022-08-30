@@ -1,0 +1,13 @@
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+            {% image block.image.image original format-webp-lossless as col_img %}
+               
+                <div class="multi_col multi_col_{{ forloop.counter }}_{{self.row_id}}_{{self.row.id}} {% if block.col_style.no_desktop and block.col_style.no_mobile %}no_desktop no_mobile{% elif block.col_style.no_desktop %}no_desktop{% elif block.col_style.no_mobile %}no_mobile{% endif %}">
+                    
+                        {% for col in self.rows.row.col %}
+                            <div class="col" style="float: left {% include 'includes/element_style_block.html' %} ">
+                                {% include_block col.col_items %}
+                            </div>
+                        {% endfor %}
+                </div>

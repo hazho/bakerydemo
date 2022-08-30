@@ -1,0 +1,7 @@
+{% load wagtailimages_tags %}
+<style>.image_block_paralax {background-attachment: fixed;background-position: center;background-repeat: no-repeat;background-size: cover;box-shadow: inset 0 0 15px -1px;}</style>
+
+{% image self.image original format-webp-lossless as img %}
+
+    <div class="image_block_paralax" style="width:{{ self.el_style.width }}; height: {{self.el_style.height}};min-height: {{self.el_style.height}}; background-image: url({{img.url}})">
+    </div> 

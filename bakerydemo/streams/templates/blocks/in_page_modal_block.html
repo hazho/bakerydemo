@@ -1,0 +1,69 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+{% if self.is_active %}
+
+    <div id="mw_{{ self.row_style.el_id }}" class="modal_window" style="display: block;z-index: 1010;padding-top: 2.6%;position: fixed;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgba(0,0,0,0.4);">
+        <div onclick="document.getElementById('mw_{{ self.row_style.el_id }}').style.display='none'" class="modal_close" style="cursor: pointer;position: relative;top: -1.2rem;background: var(--main_bg_color);border-radius: 50%;padding: .5rem .8rem;right: -50%;font-weight: 900;text-shadow: 0 0 3px black;width: fit-content;">×</div>
+        <div id="{{ self.row_style.el_id }}" class="row_section {{ self.row_style.el_class }} {% if self.row_style.no_desktop and self.row_style.no_mobile %}no_desktop no_mobile{% elif self.row_style.no_desktop %}no_desktop{% elif self.row_style.no_mobile %}no_mobile{% endif %}"
+            style=" /* test */
+                {% if self.row_style.z_index %} z-index:{{self.row_style.z_index}};{% endif %}
+                {% if self.row_style.text_align %} text-align:{{self.row_style.text_align}};{% endif %}
+                {% if self.row_style.direction == rtl %} direction:{{self.row_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+                {% if self.row_style.position %} position:{{self.row_style.position}}; {% endif %}
+                {% if self.row_style.left %} left:{{self.row_style.left}}; {% endif %}
+                {% if self.row_style.top %} top:{{self.row_style.top}}; {% endif %}
+                {% if self.row_style.padding %} padding:{{self.row_style.padding}}; {% endif %}
+                {% if self.row_style.margin %} margin:{{self.row_style.margin}}; {% endif %}
+                {% if self.row_style.font_size %} font-size:{{self.row_style.font_size}}; {% endif %}
+                {% if self.row_style.width %} width:{{self.row_style.width}};{% endif %} 
+                {% if self.row_style.floating %} float:{{self.row_style.floating}};{% endif %} 
+                {% if self.row_style.height %} height:{{self.row_style.height}};{% endif %}
+                {% if self.row_style.b_radius %} border-radius:{{self.row_style.b_radius}};{% endif %}
+                {% if self.row_style.b_top %} border-top:{{self.row_style.b_top}};{% endif %}
+                {% if self.row_style.b_right %} border-right:{{self.row_style.b_right}};{% endif %}
+                {% if self.row_style.b_bottom %} border-bottom:{{self.row_style.b_bottom}};{% endif %}
+                {% if self.row_style.b_left %} border-left:{{self.row_style.b_left}};{% endif %}
+                {% if self.row_style.box_shadow %} box-shadow: {{self.row_style.box_shadow}} ;{% endif %}
+                {% if self.row_style.overflow %} overflow: {{self.row_style.overflow}} ;{% endif %}
+                {% if self.row_style.color %} color: {{self.row_style.color}} ;{% endif %}
+                {% if self.row_style.use_bg_color %} background-color:{{self.row_style.bg_c}};{% endif %}
+                {% if self.row_style.image %}{% image self.row_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if self.row_style.paralax %}fixed{% else %}scroll{% endif %}{% endif %}
+            "  >
+                {% for block in self.row.col %}
+                    <div id="multi_col_{{self.row_id}}_{{ forloop.counter }}"  class="{{ block.col_style.el_class }} multi_col {% if block.col_style.no_desktop and block.col_style.no_mobile %}no_desktop no_mobile{% elif block.col_style.no_desktop %}no_desktop{% elif block.col_style.no_mobile %}no_mobile{% endif %}" 
+                        style="
+                            {% if block.col_style.z_index %} z-index:{{block.col_style.z_index}};{% endif %}
+                            {% if block.col_style.text_align %} text-align:{{block.col_style.text_align}};{% endif %}
+                            {% if block.col_style.direction == rtl %} direction:{{block.col_style.direction}}; unicode-bidi: isolate !important;{% endif %}
+                            {% if block.col_style.position %} position:{{block.col_style.position}}; {% endif %}
+                            {% if block.col_style.left %} left:{{block.col_style.left}}; {% endif %}
+                            {% if block.col_style.top %} top:{{block.col_style.top}}; {% endif %}
+                            {% if block.col_style.padding %} padding:{{block.col_style.padding}}; {% endif %}
+                            {% if block.col_style.margin %} margin:{{block.col_style.margin}}; {% endif %}
+                            {% if block.col_style.font_size %} font-size:{{block.col_style.font_size}}; {% endif %}
+                            {% if block.col_style.width %} width:{{block.col_style.width}};{% endif %}
+                            {% if block.col_style.height %} height:{{block.col_style.height}};{% endif %}
+                            {% if block.col_style.b_radius %} border-radius:{{block.col_style.b_radius}};{% endif %}
+                            {% if block.col_style.b_top %} border-top:{{block.col_style.b_top}};{% endif %}
+                            {% if block.col_style.b_right %} border-right:{{block.col_style.b_right}};{% endif %}
+                            {% if block.col_style.b_bottom %} border-bottom:{{block.col_style.b_bottom}};{% endif %}
+                            {% if block.col_style.b_left %} border-left:{{block.col_style.b_left}};{% endif %}
+                            {% if block.col_style.box_shadow %} box-shadow: {{block.col_style.box_shadow}} ;{% endif %}
+                            {% if block.col_style.overflow %} overflow: {{block.col_style.overflow}} ;{% endif %}
+                            {% if block.col_style.color %} color: {{block.col_style.color}} ;{% endif %}
+                            {% if block.col_style.use_bg_color %} background-color:{{block.col_style.bg_c}};{% endif %}
+                            {% if block.col_style.image %}{% image block.col_style.image original format-webp-lossless as img %}background-position: center;background-repeat: no-repeat;background-size: cover;background-image: url({{img.url}});background-attachment: {% if block.col_style.paralax %}fixed;{% else %}scroll;{% endif %}{% endif %}
+                            ">
+                        {{ block.col_row }}
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            document.getElementById('mw_{{ self.row_style.el_id }}').style.display='none';
+        }
+        })
+    </script>
+{% endif %}

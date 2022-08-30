@@ -1,0 +1,23 @@
+{% load wagtailcore_tags strings_tags %}
+
+<marquee 
+    {% if self.ms.dir %} direction="{{ self.ms.dir }}" {% endif %}
+    {% if self.ms.loop %} loop="{{ self.ms.loop }}" {% endif %}
+    {% if self.ms.behavior %} behavior="{{ self.ms.behavior }}" {% endif %}
+    {% if self.ms.scrollamount %} scrollamount="{{ self.ms.scrollamount }}" {% endif %}
+    
+    style="
+    width: {{ self.ms.width }};
+    {% if self.ms.use_bg_color %} background-color: {{ self.ms.bg_c }}; {% endif %}
+    {% if self.ms.height %} height: {{ self.ms.height }}; {% endif %}
+    {% if self.ms.margin %} margin: {{ self.ms.margin }}; {% endif %}
+    {% if self.ms.box_shadow %} box-shadow: {{ self.ms.box_shadow }}; {% endif %}
+    {% if self.ms.padding %} padding: {{ self.ms.padding }}; {% endif %}
+    {% if self.ms.border %} border: {{ self.ms.border }}; {% endif %}
+    {% if self.ms.b_radius %} border-radius: {{ self.ms.b_radius }}; {% endif %}
+    "
+    class="marquee block-paragraph">
+
+    {{ self.paragraph.source|richtext|replace:"[sp]"|replace:"[but]"|replace:"[nl]"|replace:"[s1]"|replace:"[s1.2]"|replace:"[s1.4]"|replace:"[s1.6]"|replace:"[s1.8]"|replace:"[s2]"|replace:"[s2.2]"|replace:"[s2.4]"|replace:"[s2.6]"|replace:"[s2.8]"|replace:"[s3]"|replace:"[s3.2]"|replace:"[s3.4]"|replace:"[s3.6]"|replace:"[s3.8]"|replace:"[s4]"|replace:"[s4.2]"|replace:"[s4.4]"|replace:"[s4.6]"|replace:"[s4.8]"|replace:"[s5]"|replace:"[s5.2]"|replace:"[s5.4]"|replace:"[s5.6]"|replace:"[s5.8]"|replace:"[s6]"|replace:"[s6.2]"|replace:"[s6.4]"|replace:"[s6.6]"|replace:"[s6.8]"|replace:"[s7]" }}
+
+</marquee>
